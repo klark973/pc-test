@@ -1,0 +1,8 @@
+root	prepare
+root	upgrade
+root	detect
+both	config
+root	install
+root	fwupd
+root	syslogs
+root	collect

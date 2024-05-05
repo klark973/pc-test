@@ -1,0 +1,4 @@
+[seq-read-1m]
+rw=read
+bs=1m
+include test.ini

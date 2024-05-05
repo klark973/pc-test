@@ -1,0 +1,5 @@
+[seq-write-1m]
+rw=write
+bs=1m
+buffered=0
+include test.ini

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=PC Test Suite
+Comment=Test utility
+Icon=utilities-system-monitor
+Exec=/usr/libexec/pc-test/launcher.sh
+Keywords=PC;Test;System;CPU;Memory;Cache;Hardware;Computer;Server;
+Categories=ConsoleOnly;System;Utility;

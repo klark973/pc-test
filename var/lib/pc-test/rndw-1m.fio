@@ -1,0 +1,5 @@
+[random-write-1m]
+rw=randwrite
+bs=1m
+buffered=0
+include test.ini

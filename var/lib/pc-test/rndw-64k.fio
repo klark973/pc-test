@@ -1,0 +1,7 @@
+[random-write-64k]
+rw=randwrite
+bs=64k
+numjobs=16
+iodepth=32
+filesize=512m
+include test.ini

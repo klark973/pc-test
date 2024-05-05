@@ -1,0 +1,290 @@
+#!/bin/bash
+### This file is covered by the GNU General Public License
+### version 3 or later.
+###
+### Copyright (C) 2024, ALT Linux Team
+
+###################
+### Main script ###
+###################
+
+# Safety first
+set -o errexit
+set -o noglob
+set -o nounset
+set -o errtrace
+#
+umask 0022
+export TMPDIR="${TMPDIR:-/tmp}"
+
+# Full path to this script
+# shellcheck disable=SC2155
+readonly scriptname="$(realpath -- "$0")"
+
+# Executable file name
+readonly progname="${scriptname##*/}"
+
+# Supplemental sources
+readonly libdir="/usr/libexec/$progname"
+
+# Testing results
+readonly TEST_PASSED=0
+readonly TEST_ALLOWED=0
+readonly TEST_FAILED=128
+readonly TEST_SKIPPED=129
+readonly TEST_BLOCKED=130
+readonly TEST_RUNNING=131
+
+# Bootstrapping
+. "$libdir"/defaults.sh
+[ ! -s "/etc/$progname.conf" ] ||
+	. "/etc/$progname.conf"
+. "$libdir"/internal.sh
+. "$libdir"/version.sh
+. "$libdir"/common.sh
+. "$libdir"/parser.sh
+
+# Catching unexpected errors
+trap 'unexpected_error "$LINENO" "${BASH_SOURCE[0]}"' ERR
+
+# Entry point
+nls_locale_setup
+parse_cmdline "$@"
+setup_console
+
+usertype=
+
+# Default working directory
+lastdir="${homedir:-$HOME}/PC-TEST"
+workdir="${repodate:-$(date '+%Y-%m-%d')}"
+workdir="${homedir:-$HOME}/.local/share/$progname/$workdir"
+
+# Determining launch mode
+case "$launchmode" in
+"auto")	# For one day we may not think about launch modes
+	if [ -L "$lastdir" ] &&
+	   [ -s "$lastdir/$progname.log" ] &&
+	   [ -f "$lastdir"/STATE/start.txt ] &&
+	   [ "$(realpath -- "$lastdir")" = "$(realpath -- "$workdir")" ]
+	then
+		if [ -s "$lastdir"/STATE/STEP ]; then
+			launchmode="continue"
+		elif [ ! -f "$lastdir"/STATE/STEP ] &&
+		     [ ! -s "$lastdir"/STATE/start.txt ] &&
+		     [ ! -f "$lastdir"/STATE/finish.txt ]
+		then
+			launchmode=finish
+		else
+			launchmode=start
+		fi
+	else
+		launchmode=start
+	fi
+	;;
+
+"continue")
+	if [ -L "$lastdir" ] &&
+	   [ -s "$lastdir"/STATE/STEP ] &&
+	   [ -s "$lastdir/$progname.log" ] &&
+	   [ -f "$lastdir"/STATE/start.txt ]
+	then
+		workdir="$(realpath -- "$lastdir")"
+	else
+		usertype="continue"
+		launchmode=start
+	fi
+	;;
+
+"finish")
+	if [ -L "$lastdir" ] &&
+	   [ ! -f "$lastdir"/STATE/STEP ] &&
+	   [ -s "$lastdir/$progname.log" ] &&
+	   [ -f "$lastdir"/STATE/start.txt ] &&
+	   [ ! -s "$lastdir"/STATE/start.txt ] &&
+	   [ ! -f "$lastdir"/STATE/finish.txt ]
+	then
+		workdir="$(realpath -- "$lastdir")"
+	else
+		usertype=finish
+		launchmode=start
+	fi
+	;;
+esac
+
+# Log of each testing
+logfile="$workdir/$progname.log"
+
+# New testing
+if [ "$launchmode" = start ]; then
+	nls_config messages
+	testplan="${L001-The launch mode \'%s\' has been changed, testing will begin again!}"
+	[ -z "$usertype" ] ||
+		printf "${CLR_WARN}${testplan}${CLR_NORM}\n" "$usertype"
+	testplan="${L002-Before testing, the system and kernel will be updated!}"
+	stepname="${L003-Press Ctrl-C to abort or any other key to continue...}"
+
+	if [ -n "$dist_upgrade" ] || [ -n "$update_kernel" ]; then
+		printf "${CLR_ERR}${testplan}${CLR_NORM}"
+		if [ -z "$batchmode" ]; then
+			printf "\n$stepname"
+			read -rs -n1 testplan ||:
+		fi
+		printf "\n\n"
+	fi
+
+	rm -rf -- "$workdir" "$lastdir"
+	mkdir -p -- "$workdir"/STATE
+	ln -snf -- "$workdir" "$lastdir"
+	cp -Lf "/var/lib/$progname/start.txt" "$workdir"/STATE/
+	head -n1 "/var/lib/$progname/start.txt" |
+		cut -f2 >"$workdir"/STATE/STEP
+	: >"$workdir"/STATE/RESULTS
+	cmd_title "$progname $*" |
+		tee -- "$logfile"
+	en_name="Starting program"
+	ru_name="Запуск программы"
+	draw_title_line "$TEST_PASSED" 5 "$(nls_title)" |
+		tee -a -- "$logfile"
+	copy_desktop_file
+	write_config
+fi
+
+# Second part of testing
+if [ "$launchmode" = finish ]; then
+	cp -Lf "/var/lib/$progname/finish.txt" "$workdir"/STATE/
+	head -n1 "/var/lib/$progname/finish.txt" |
+		cut -f2 >"$workdir"/STATE/STEP
+	cmd_title "$progname $*" |
+		tee -a -- "$logfile"
+	copy_desktop_file
+fi
+
+# Overriding system settings first time
+[ ! -s "$workdir"/STATE/settings.ini ] ||
+	. "$workdir"/STATE/settings.ini
+nls_config messages
+
+# Showing passed steps results
+[ -n "$username" ] ||
+	show_results
+
+# Showing the message about resuming
+if [ "$launchmode" = finish ]; then
+	en_name="Resumption of testing"
+	ru_name="Возобновление тестирования"
+	draw_title_line "$TEST_PASSED" 11 "$(nls_title)" |
+		tee -a -- "$logfile"
+fi
+
+# Main loop
+while :; do
+	cd -- "$workdir"/
+	testplan=finish.txt
+	[ -f "STATE/$testplan" ] ||
+		testplan=start.txt
+	[ ! -s STATE/settings.ini ] ||
+		. STATE/settings.ini
+	[ -s STATE/STEP ] ||
+		break
+	stepname="$(head -n1 STATE/STEP)"
+	[ -n "$stepname" ] && [ -s "$libdir/steps/$stepname.sh" ] ||
+		fatal F18 "Step script \'%s.sh\' not found." "$stepname"
+	usertype="$(grep -sE "\s${stepname}$" "STATE/$testplan" |cut -f1)"
+	[ -n "$usertype" ] ||
+		break
+	status="$TEST_ALLOWED"
+
+	pre() {
+		# Passing a step is allowed by default
+		return $TEST_ALLOWED
+	}
+
+	if [ "$usertype" = root ] && [ "$EUID" != 0 ]; then
+		restart_as_root || exit 1
+
+		. "$libdir/steps/$stepname.sh"
+	elif [ "$usertype" = user ] && [ "$EUID" = 0 ]; then
+		status="$TEST_BLOCKED"
+		rm -f STATE/STATUS
+
+		. "$libdir/steps/$stepname.sh"
+	else
+		. "$libdir/steps/$stepname.sh"
+
+		rm -f STATE/STATUS
+		pre || status="$?"
+
+		if [ "$status" = "$TEST_ALLOWED" ]; then
+			if [ "$EUID" = 0 ] && [ -n "$username" ]; then
+				rm -rf TMP-ROOT
+				mkdir TMP-ROOT
+				cd TMP-ROOT/
+			fi
+			show_test_title
+			testcase || status="$?"
+		fi
+
+		cd -- "$workdir"/
+
+		if [ "$EUID" = 0 ] && [ -n "$username" ]; then
+			if [ -d TMP-ROOT ]; then
+				chown -R -- "$username:$username" TMP-ROOT
+				(set +f; mv -f TMP-ROOT/* ./ ||:) 2>/dev/null
+				rm -rf TMP-ROOT
+			fi
+
+			if [ -d STATE ]; then
+				printf "%s\n" "$status" >STATE/STATUS
+
+				# Sometimes we get a very strange error at this stage
+				# when using the startup desktop file. Repeating the
+				# command after a short delay is a workaround.
+				#
+				if ! chown -- "$username:$username" STATE/STATUS; then
+					sleep 3; printf "%s\n" "$status" >STATE/STATUS
+					chown -- "$username:$username" STATE/STATUS ||:
+				fi
+			fi
+
+			exit 0
+		fi
+	fi
+
+	have_next_step || break
+done
+
+# Removing the desktop file
+remove_desktop_file
+
+# Showing last message
+if [ "$testplan" = start.txt ]; then
+	status="${L004-The first part of testing is complete!}"
+	printf "\n${CLR_OK}${status}${CLR_NORM}\n"
+	status="${L005-Perform manual testing according to sections 9 and 10.}"
+	printf "$status\n"
+	status="${L006-Don\'t forget to run \'@BOLD@\' after testing!}"
+	printf "$(bold "$status")\n" "$progname --finish"
+else
+	stepname="$progname-${workdir##*/}.tar"
+	status="${L007-Testing is complete!}"
+	printf "\n${CLR_OK}${status}${CLR_NORM}\n"
+	status="${L008-Creating the archive \'@BOLD@\'...}"
+	printf "$(bold "$status")\n" "$stepname"
+
+	# Creating an archive
+	mv -f STATE/settings.ini ./ && rm -rf STATE
+	cd .. && tar -cf "$HOME/$stepname" "${workdir##*/}"
+
+	# Moving archive to the server
+	if [ -d "/mnt/$progname" ]; then
+		testplan="/mnt/$progname/$compname-${workdir##*/}.tar"
+		if cp -Lf -- "$HOME/$stepname" "$testplan" 2>/dev/null; then
+			status="${L009-Now this archive has been moved to}"
+			printf "${status}: \'${CLR_WARN}%s${CLR_NORM}\'.\n" "$testplan"
+			rm -f -- "$HOME/$stepname"
+		fi
+	fi
+fi
+
+pause_before_exit
+
