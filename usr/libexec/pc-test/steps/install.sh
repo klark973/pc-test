@@ -268,8 +268,12 @@ testcase()
 	fi
 
 	# Saving new configuration and rebooting
-	[ -z "$wconf" ] ||
+	if [ -n "$wconf" ]; then
 		write_config
+		cat -- "$workdir"/STATE/settings.ini >install.ini
+		wconf="\"${CLR_LC1}\" \$1 \"${CLR_BOLD}=${CLR_LC2}\" \$2 \"${CLR_NORM}\""
+		cat -- "$workdir"/STATE/settings.ini |awk -F = "{print $wconf;}"
+	fi
 	system_restart
 }
 
