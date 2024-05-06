@@ -23,7 +23,8 @@ testcase()
 
 	# Install MATE in ALT SP Server
 	if [ -n "$install_mate" ]; then
-		list="mate-default lightdm-gtk-greeter fonts-ttf-dejavu"
+		list="mate-default lightdm-gtk-greeter"
+		list="$list fonts-ttf-dejavu firefox-esr"
 
 		for pkg in $list; do
 			if ! is_pkg_available "$pkg"; then
@@ -34,7 +35,7 @@ testcase()
 		done
 
 		if [ -n "$install_mate" ]; then
-			for pkg in $list; do
+			for pkg in $list yad; do
 				is_pkg_installed "$pkg" ||
 					packages="$packages $pkg"
 			done
@@ -109,7 +110,9 @@ testcase()
 	fi
 
 	# Xorg with any DE
-	if [ -z "$have_xorg" ] || [ -z "${DISPLAY-}" ]; then
+	if [ -z "$have_xorg" ] ||
+	   [ -z "$install_mate" ] && [ -z "${DISPLAY-}" ]
+	then
 		webcam_test=
 		v3d_test=
 		wconf=1
