@@ -17,8 +17,10 @@ testcase()
 	local list pkg packages wconf= deinstall=
 
 	# 8.1. Essential packages: must be installed from external repo
-	list="hdparm system-report sos rfkill iperf3 acpica dmidecode"
-	list="$list lsblk smartmontools stress-ng cpupower eject"
+	list="hdparm system-report rfkill iperf3 acpica dmidecode"
+	list="$list lsblk smartmontools stress-ng cpupower"
+	[ -z "$devel_test" ] ||
+		list="$list sos eject"
 	packages="$list"
 
 	# Install MATE in ALT SP Server
