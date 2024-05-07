@@ -50,8 +50,11 @@ trap 'unexpected_error "$LINENO" "${BASH_SOURCE[0]}"' ERR
 # Entry point
 nls_locale_setup
 parse_cmdline "$@"
-setup_console
 
+# User-defined settings
+[ ! -s "${homedir:-$HOME}/.config/$progname.conf" ] ||
+	. "${homedir:-$HOME}/.config/$progname.conf"
+setup_console
 usertype=
 
 # Default working directory
