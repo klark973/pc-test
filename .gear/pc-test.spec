@@ -121,7 +121,7 @@ cp -aRf etc usr var "%buildroot/"
 %ghost %_logdir/%name.log
 
 %files doc
-%doc img LICENSE README.md
+%doc img html LICENSE README.md
 
 %changelog
 * Sun May 05 2024 Leonid Krivoshein <klark@altlinux.org> 2.1.0-alt5
