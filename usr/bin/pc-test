@@ -230,24 +230,18 @@ while :; do
 		cd -- "$workdir"/
 
 		if [ "$EUID" = 0 ] && [ -n "$username" ]; then
-			if [ -d TMP-ROOT ]; then
-				chown -R -- "$username:$username" TMP-ROOT
-				(set +f; mv -f TMP-ROOT/* ./ ||:) 2>/dev/null
-				rm -rf TMP-ROOT
+			if [ -d ./TMP-ROOT ]; then
+				chown -R -- "$username":"$username" ./TMP-ROOT
+				(set +f; mv -f ./TMP-ROOT/* ./ ||:) 2>/dev/null
+				rm -rf ./TMP-ROOT
 			fi
 
-			if [ -d STATE ]; then
-				printf "%s\n" "$status" >STATE/STATUS
-
-				# Sometimes we get a very strange error at this stage
-				# when using the startup desktop file. Repeating the
-				# command after a short delay is a workaround.
-				#
-				if ! chown -- "$username:$username" STATE/STATUS; then
-					sleep 3; printf "%s\n" "$status" >STATE/STATUS
-					chown -- "$username:$username" STATE/STATUS ||:
-				fi
-			fi
+			# Sometimes we get a very strange fault at this point
+			#
+			if [ -d ./STATE ]; then
+				printf "%s\n" "$status" >./STATE/STATUS ||:
+				chown -- "$username":"$username" ./STATE/STATUS ||:
+			fi 2>/dev/null
 
 			exit 0
 		fi

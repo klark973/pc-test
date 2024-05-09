@@ -333,7 +333,7 @@ have_next_step()
 		return 1
 	printf "%s\n" "$stepname" >"$stepfile"
 	[ "$EUID" != 0 ] || [ -z "$username" ] ||
-		chown -- "$username:$username" "$stepfile"
+		chown -- "$username":"$username" "$stepfile"
 	return 0
 }
 
@@ -346,16 +346,16 @@ break_step()
 	# shellcheck disable=SC2164
 	cd -- "$workdir"/
 
-	if [ "$EUID" = 0 ] && [ -n "$username" ] && [ -d TMP-ROOT ]; then
-		chown -R -- "$username:$username" TMP-ROOT
-		(set +f; mv -f TMP-ROOT/* ./ ||:) 2>/dev/null
-		rm -rf TMP-ROOT
+	if [ "$EUID" = 0 ] && [ -n "$username" ] && [ -d ./TMP-ROOT ]; then
+		chown -R -- "$username":"$username" ./TMP-ROOT
+		(set +f; mv -f ./TMP-ROOT/* ./ ||:) 2>/dev/null
+		rm -rf ./TMP-ROOT
 	fi
 
-	if [ -d STATE ]; then
-		printf "%s\n" "$status" >STATE/STATUS
+	if [ -d ./STATE ]; then
+		printf "%s\n" "$status" >./STATE/STATUS
 		[ "$EUID" != 0 ] || [ -z "$username" ] ||
-			chown -- "$username:$username" STATE/STATUS
+			chown -- "$username":"$username" ./STATE/STATUS
 	fi
 
 	have_next_step || remove_desktop_file
@@ -401,7 +401,7 @@ write_config()
 	done >"$sf"
 
 	[ "$EUID" != 0 ] || [ -z "$username" ] ||
-		chown -- "$username:$username" "$sf"
+		chown -- "$username":"$username" "$sf"
 	return 0
 }
 
