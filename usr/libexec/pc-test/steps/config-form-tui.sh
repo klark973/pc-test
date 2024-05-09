@@ -57,7 +57,7 @@ form_tui()
 	done
 
 	#dialog --no-tags --shadow --backtitle "PC-Test vX.Y.Z/D"	\
-	#	--title "[ Defining test parameters ]"			\
+	#	--title "[ Defining a Test Plan ]"			\
 	#	--checklist "" 20 51 14					\
 	#	mate "Installing MATE in ALT SP Server 10" off		\
 	#	fwupd "Hardware components firmware update" off		\

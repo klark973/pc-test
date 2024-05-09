@@ -44,7 +44,7 @@ form_gui()
 
 	#r=$(yad \
 	#	--borders=15 --form --separator=" "			\
-	#	--title="Defining test parameters"			\
+	#	--title="Defining a Test Plan"				\
 	#	--field="Hardware components firmware update:CHK"	\
 	#	--field="Additional diagnostics for developers:CHK"	\
 	#	--field="Testing Infiniband/RDMA:CHK"			\
