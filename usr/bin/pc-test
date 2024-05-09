@@ -55,6 +55,11 @@ parse_cmdline "$@"
 [ ! -s "${homedir:-$HOME}/.config/$progname.conf" ] ||
 	. "${homedir:-$HOME}/.config/$progname.conf"
 setup_console
+
+# Testing methodology
+helpfile="/usr/share/doc/$progname-doc-$PCTEST_VERSION/html/$progname.html"
+[ -r "$helpfile" ] ||
+	helpfile=
 usertype=
 
 # Default working directory
