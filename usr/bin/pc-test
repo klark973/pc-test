@@ -262,8 +262,8 @@ remove_desktop_file
 if [ "$testplan" = start.txt ]; then
 	status="${L004-The first part of testing is complete!}"
 	printf "\n${CLR_OK}${status}${CLR_NORM}\n"
-	status="${L005-Perform manual testing according to sections 9 and 10.}"
-	printf "$status\n"
+	status="Perform manual testing according to section 10 of the methodology."
+	printf "${L005-$status}\n"
 	status="${L006-Don\'t forget to run \'@BOLD@\' after testing!}"
 	printf "$(bold "$status")\n" "$progname --finish"
 else

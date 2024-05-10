@@ -12,7 +12,7 @@
 #L002="Before testing, the system and kernel will be updated!"
 #L003="Press Ctrl-C to abort or any other key to continue..."
 #L004="The first part of testing is complete!"
-#L005="Perform manual testing according to sections 9 and 10."
+#L005="Perform manual testing according to section 10 of the methodology."
 #L006="Don\'t forget to run \'@BOLD@\' after testing!"
 #L007="Testing is complete!"
 #L008="Creating the archive \'@BOLD@\'..."

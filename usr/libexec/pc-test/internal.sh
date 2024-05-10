@@ -40,6 +40,7 @@ drives=
 # Tests
 fwupd_test=
 devel_test=
+xprss_test=
 infb_test=
 sound_test=
 numa_test=

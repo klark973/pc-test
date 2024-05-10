@@ -13,6 +13,7 @@ mate_item="Installing MATE in ALT SP Server 10"
 tests_list=(
 	fwupd	"Hardware components firmware update"
 	devel	"Additional diagnostics for developers"
+	xprss	"Express test of main components"
 	infb	"Testing Infiniband/RDMA"
 	sound	"Testing Sound Card"
 	numa	"Testing NUMA Technology"

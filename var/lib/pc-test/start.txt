@@ -6,3 +6,4 @@ root	install
 root	fwupd
 root	syslogs
 root	collect
+user	express

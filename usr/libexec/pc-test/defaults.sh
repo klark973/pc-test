@@ -48,3 +48,6 @@ unsafe_diskperf=
 # When it set, the program will not use the desktop file for autorun
 disable_autorun=
 
+# A URL pointing to a sample Full HD video for Express-testing
+local_video_sample=
+

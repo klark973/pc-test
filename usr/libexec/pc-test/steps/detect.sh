@@ -170,6 +170,9 @@ testcase()
 				scard_test=1
 	fi
 
+	# Can we do an express test?
+	cando_express_test && xprss_test=1 ||:
+
 	# Removing temporary file
 	spawn rm -f -- "$tmpf"
 
@@ -178,5 +181,32 @@ testcase()
 	cat -- "$workdir"/STATE/settings.ini >detect.ini
 	tmpf="\"${CLR_LC1}\" \$1 \"${CLR_BOLD}=${CLR_LC2}\" \$2 \"${CLR_NORM}\""
 	cat -- "$workdir"/STATE/settings.ini |awk -F = "{print $tmpf;}"
+}
+
+cando_express_test()
+{
+	local iface cnt=0
+
+	[ "$pctype" != Server ] ||
+		return 1
+	[ -n "$sound_test" ] && [ -n "$have_xorg" ] ||
+		return 1
+	[ -n "$have_mate" ] || [ -n "$have_kde5" ] || [ -n "$have_xfce" ] ||
+		return 1
+
+	for iface in $(ls /sys/class/net/) _; do
+		case "$iface" in
+		lo|_)	continue;;
+		*)	cnt=$((1 + $cnt));;
+		esac
+	done
+
+	[ "$cnt" -gt 0 ] ||
+		return 1
+	spawn inxi -G -c0 |grep -qs ' Device-1: ' ||
+		return 1
+	spawn inxi -Gxx -c0 |grep -qs ' Monitor-1: ' ||
+		return 1
+	return 0
 }
 

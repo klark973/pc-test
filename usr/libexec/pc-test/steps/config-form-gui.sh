@@ -47,6 +47,7 @@ form_gui()
 	#	--title="Defining a Test Plan"				\
 	#	--field="Hardware components firmware update:CHK"	\
 	#	--field="Additional diagnostics for developers:CHK"	\
+	#	--field="Express test of main components:CHK"		\
 	#	--field="Testing Infiniband/RDMA:CHK"			\
 	#	--field="Testing Sound Card:CHK"			\
 	#	--field="Testing NUMA Technology:CHK"			\
@@ -58,7 +59,7 @@ form_gui()
 	#	--field="Testing Smart-cards interface:CHK"		\
 	#	--field="Checking Disk drives performance:CHK"		\
 	#	--field="Checking 2D/3D-Video performance:CHK"		\
-	#	FALSE TRUE TRUE FALSE TRUE TRUE FALSE			\
+	#	FALSE TRUE TRUE TRUE FALSE TRUE TRUE FALSE		\
 	#	FALSE FALSE FALSE FALSE FALSE FALSE 2>yad.log)"
 
 	while :; do

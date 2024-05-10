@@ -62,6 +62,7 @@ form_tui()
 	#	mate "Installing MATE in ALT SP Server 10" off		\
 	#	fwupd "Hardware components firmware update" off		\
 	#	devel "Additional diagnostics for developers" on	\
+	#	xprss "Express test of main components" on		\
 	#	infb "Testing Infiniband/RDMA" on			\
 	#	sound "Testing Sound Card" off				\
 	#	numa "Testing NUMA Technology" on			\
