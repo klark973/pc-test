@@ -124,7 +124,6 @@ logfile="$workdir/$progname.log"
 
 # New testing
 if [ "$launchmode" = start ]; then
-	nls_config messages
 	testplan="${L001-The launch mode \'%s\' has been changed, testing will begin again!}"
 	[ -z "$usertype" ] ||
 		printf "${CLR_WARN}${testplan}${CLR_NORM}\n" "$usertype"
@@ -155,6 +154,11 @@ if [ "$launchmode" = start ]; then
 		tee -a -- "$logfile"
 	copy_desktop_file
 	write_config
+else
+	# Overriding system settings first time
+	[ ! -s "$workdir"/STATE/settings.ini ] ||
+		. "$workdir"/STATE/settings.ini
+	nls_config messages
 fi
 
 # Second part of testing
@@ -167,13 +171,8 @@ if [ "$launchmode" = finish ]; then
 	copy_desktop_file
 fi
 
-# Overriding system settings first time
-[ ! -s "$workdir"/STATE/settings.ini ] ||
-	. "$workdir"/STATE/settings.ini
-nls_config messages
-
 # Showing passed steps results
-[ -n "$username" ] ||
+[ "$EUID" = 0 ] && [ -n "$username" ] ||
 	show_results
 
 # Showing the message about resuming
