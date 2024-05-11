@@ -20,13 +20,13 @@ testcase()
 	fi
 
 	# 10.11. Final check of kernel messages
-	spawn dmesg -H -P --color=always |gzip -9 >dmesg_final.gz
+	spawn dmesg -H -P -T --color=always |gzip -9 >dmesg_final.gz
 
 	# Removing an empty log
 	[ -s "$workdir"/yad.log ] ||
 		spawn rm -f -- "$workdir"/yad.log
 
-	# Version of this program
+	# Showing version of this program
 	spawn "$progname" --version |tee version.txt
 }
 
