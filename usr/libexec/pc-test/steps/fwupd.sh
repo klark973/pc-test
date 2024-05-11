@@ -26,6 +26,11 @@ testcase()
 {
 	local rc="$TEST_ALLOWED"
 
+	# Using POSIX output in some cases
+	if [ -n "$username" ] && [ "$langid" != en ]; then
+		export LANG=C
+	fi
+
 	# 6.1. List devices
 	printf "===[ Devices list:\n"
 	spawn fwupdmgr get-devices ||

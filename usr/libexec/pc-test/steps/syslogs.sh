@@ -16,6 +16,11 @@ testcase()
 {
 	local filter="(panic|fatal|fail|error|warning)"
 
+	# Using POSIX output in some cases
+	if [ -n "$username" ] && [ "$langid" != en ]; then
+		export LANG=C
+	fi
+
 	# 7.2. dmesg and errors
 	dmesg | grep -isE -- "$filter" |
 		grep -vs ' Command line: ' |

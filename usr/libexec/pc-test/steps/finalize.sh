@@ -14,6 +14,11 @@ ru_name="Контрольная проверка сообщений ядра"
 
 testcase()
 {
+	# Using POSIX output in some cases
+	if [ -n "$username" ] && [ "$langid" != en ]; then
+		export LANG=C
+	fi
+
 	# 10.11. Final check of kernel messages
 	spawn dmesg -H -P --color=always |gzip -9 >dmesg_final.gz
 

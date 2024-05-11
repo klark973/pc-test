@@ -28,6 +28,11 @@ testcase()
 	local rc swaps=( ) mounted=( )
 	local pdev fs=8589934592 # 8 GiB
 
+	# Using POSIX output in some cases
+	if [ -n "$username" ] && [ "$langid" != en ]; then
+		export LANG=C
+	fi
+
 	# Searching active SWAPs >= 8 GiB
 	cmd="${L190-Searching active SWAP devices}"
 	printf "$cmd...\n" |tee -a -- "$logfile"

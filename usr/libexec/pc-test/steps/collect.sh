@@ -16,6 +16,11 @@ testcase()
 {
 	local dev
 
+	# Using POSIX output in some cases
+	if [ -n "$username" ] && [ "$langid" != en ]; then
+		export LANG=C
+	fi
+
 	# 8.2.1. inxi
 	if [ -n "$colormode" ]; then
 		spawn inxi -v8 -c2 |tee inxi.txt
