@@ -4,6 +4,7 @@
 
 ### Added
 
+- Test of CPU Performance Scaling modes according to section 10.1
 - An express test according to section 9
 - The ability to manually testing
 - Testing methodology v2.1 (HTML5) and change log
