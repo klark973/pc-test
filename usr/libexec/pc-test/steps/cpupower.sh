@@ -336,10 +336,10 @@ testcase()
 	fi
 
 	# Warming up and main testing
-	spawn stress-ng --cpu 0 --numa 0 --cpu-method matrixprod \
-		--tz --metrics --timeout 30 |tee -a -- "$logfile"
-	spawn stress-ng --cpu 0 --cpu-method matrixprod --tz \
-		--metrics --timeout 20 |tee -a -- "$logfile"
+	spawn2 stress-ng --cpu 0 --numa 0 --cpu-method matrixprod \
+		--tz --metrics --timeout 30 2>&1 |tee -a -- "$logfile"
+	spawn2 stress-ng --cpu 0 --cpu-method matrixprod --tz \
+		--metrics --timeout 20 2>&1 |tee -a -- "$logfile"
 	stress-ng --cpu 0 --cpu-method matrixprod --metrics \
 		--timeout 10 &>/dev/null & v="$!"
 	spawn sleep 5

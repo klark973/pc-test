@@ -188,6 +188,15 @@ spawn()
 	"$@" || return $?
 }
 
+# This is the same as the previous one, but for cases without
+# a log or for commands with output only to stderr
+#
+spawn2()
+{
+	cmd_title "$*" >&2
+	"$@" || return $?
+}
+
 # Restarts this program with root privileges
 #
 restart_as_root()
