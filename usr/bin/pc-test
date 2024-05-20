@@ -173,16 +173,17 @@ if [ "$launchmode" = finish ]; then
 	copy_desktop_file
 fi
 
-# Showing passed steps results
-[ "$EUID" = 0 ] && [ -n "$username" ] ||
-	show_results
-
-# Showing the message about resuming
-if [ "$launchmode" = finish ]; then
-	en_name="Resumption of testing"
-	ru_name="Возобновление тестирования"
-	draw_title_line "$TEST_PASSED" 11 "$(nls_title)" |
-		tee -a -- "$logfile"
+# Showing passed steps results and the message about resuming
+if [ "$EUID" != 0 ] || [ -z "$username" ]; then
+	if [ "$launchmode" != start ]; then
+		show_results
+		en_name="Resumption of testing"
+		ru_name="Возобновление тестирования"
+		[ ! -r "$workdir"/STATE/NUMBER ] && number=5 ||
+			number="$(head -n1 -- "$workdir"/STATE/NUMBER).1"
+		draw_title_line "$TEST_PASSED" "$number" "$(nls_title)" |
+			tee -a -- "$logfile"
+	fi
 fi
 
 # Main loop
@@ -220,6 +221,7 @@ while :; do
 	else
 		. "$libdir/steps/$stepname.sh"
 
+		printf "%s\n" "${number-5}" >STATE/NUMBER
 		rm -f STATE/STATUS
 		pre || status="$?"
 
@@ -246,7 +248,8 @@ while :; do
 			#
 			if [ -d ./STATE ]; then
 				printf "%s\n" "$status" >./STATE/STATUS ||:
-				chown -- "$username":"$username" ./STATE/STATUS ||:
+				chown -- "$username":"$username" \
+					  ./STATE/STATUS ./STATE/NUMBER ||:
 			fi 2>/dev/null
 
 			exit 0
