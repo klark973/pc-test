@@ -391,7 +391,11 @@ system_restart()
 		sleep "$t"
 	fi
 
-	reboot
+	# Restarting
+	msg="${L054-Rebooting the system...}"
+	printf "[${CLR_BOLD}%s${CLR_NORM}] ${CLR_ERR}%s${CLR_NORM}\n" \
+		"$(date '+%T')" "$msg" |tee -a -- "$logfile" >&2
+	sync && reboot
 }
 
 # Writes configuration of the test
