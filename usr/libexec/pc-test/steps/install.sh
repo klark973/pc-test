@@ -16,17 +16,20 @@ testcase()
 {
 	local list pkg packages wconf= deinstall=
 
-	# 8.1. Essential packages: must be installed from external repo
-	list="hdparm system-report rfkill iperf3 acpica dmidecode"
+	# 8.1. Essential packages must be installed from an external repo
+	list="hdparm system-report rfkill acpica dmidecode"
 	list="$list lsblk smartmontools stress-ng cpupower"
 	[ -z "$devel_test" ] ||
 		list="$list sos eject"
+	[ -z "$ifaces" ] ||
+		list="$list iperf3"
 	packages="$list"
 
 	# Install MATE in ALT SP Server
 	if [ -n "$install_mate" ]; then
-		list="mate-default lightdm-gtk-greeter"
-		list="$list fonts-ttf-dejavu firefox-esr"
+		list="mate-default lightdm-gtk-greeter fonts-ttf-dejavu"
+		[ -z "$xprss_test" ] && [ -z "$helpfile" ] ||
+			list="$list firefox-esr"
 
 		for pkg in $list; do
 			if ! is_pkg_available "$pkg"; then

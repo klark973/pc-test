@@ -36,6 +36,7 @@ have_xfce=
 archname=
 pctype=
 drives=
+ifaces=
 
 # Tests
 fwupd_test=

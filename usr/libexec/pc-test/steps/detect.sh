@@ -170,6 +170,17 @@ testcase()
 				scard_test=1
 	fi
 
+	# How many network interfaces do we have?
+	for i in $(ls /sys/class/net/) _; do
+		case "$i" in
+		lo|_)	continue;;
+		*)	ifaces="$ifaces $i";;
+		esac
+	done
+
+	# Removing space at the start of string
+	[ -z "$ifaces" ] || ifaces="${ifaces:1}"
+
 	# Can we do an express test?
 	cando_express_test && xprss_test=1 ||:
 
@@ -185,23 +196,11 @@ testcase()
 
 cando_express_test()
 {
-	local iface cnt=0
-
-	[ "$pctype" != Server ] ||
+	[ "$pctype" != Server ] && [ -n "$ifaces" ] ||
 		return 1
 	[ -n "$sound_test" ] && [ -n "$have_xorg" ] ||
 		return 1
 	[ -n "$have_mate" ] || [ -n "$have_kde5" ] || [ -n "$have_xfce" ] ||
-		return 1
-
-	for iface in $(ls /sys/class/net/) _; do
-		case "$iface" in
-		lo|_)	continue;;
-		*)	cnt=$((1 + $cnt));;
-		esac
-	done
-
-	[ "$cnt" -gt 0 ] ||
 		return 1
 	spawn inxi -G -c0 |grep -qs ' Device-1: ' ||
 		return 1

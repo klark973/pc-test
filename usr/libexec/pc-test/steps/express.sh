@@ -22,21 +22,11 @@ vsamples=(
 
 pre()
 {
-	local iface cnt=0
-
 	[ -n "$sound_test" ] && [ -n "$xprss_test" ] && [ -n "$have_xorg" ] ||
 		return $TEST_SKIPPED
 	[ -n "$have_mate" ] || [ -n "$have_kde5" ] || [ -n "$have_xfce" ] ||
 		return $TEST_SKIPPED
-
-	for iface in $(ls /sys/class/net/) _; do
-		case "$iface" in
-		lo|_)	continue;;
-		*)	cnt=$((1 + $cnt));;
-		esac
-	done
-
-	[ "$cnt" -gt 0 ] ||
+	[ -n "$ifaces" ] ||
 		return $TEST_SKIPPED
 	spawn grep -qs ' Device-1: ' inxi-G.txt ||
 		return $TEST_SKIPPED
