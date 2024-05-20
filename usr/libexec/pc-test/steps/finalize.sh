@@ -23,8 +23,7 @@ testcase()
 	spawn dmesg -H -P -T --color=always |gzip -9 >dmesg_final.gz
 
 	# Removing an empty log
-	[ -s "$workdir"/yad.log ] ||
-		spawn rm -f -- "$workdir"/yad.log
+	[ -s "$xorglog" ] || spawn rm -f -- "$xorglog"
 
 	# Showing version of this program
 	spawn "$progname" --version |tee version.txt

@@ -18,12 +18,13 @@ form_gui()
 	h="$(( $n / 2 ))"
 	args=(
 		yad --borders=15 --form
+		"--window-icon=utilities-system-monitor"
 		"--separator=\" \""
 		"--title=\"$title\""
 	)
 
-	#yad --borders=15 --form --separator=" " \
-	#	--title="<TITLE>" <ITEMS>... <VALUES>...
+	#yad --borders=15 --form --window-icon=utilities-system-monitor \
+	#	--separator=" " --title="<TITLE>" <ITEMS>... <VALUES>...
 
 	while [ "$i" -lt "$n" ]; do
 		val="${tests_list[$i]}"
@@ -44,6 +45,7 @@ form_gui()
 
 	#r=$(yad \
 	#	--borders=15 --form --separator=" "			\
+	#	--window-icon=utilities-system-monitor			\
 	#	--title="Defining a Test Plan"				\
 	#	--field="Hardware components firmware update:CHK"	\
 	#	--field="Additional diagnostics for developers:CHK"	\
@@ -60,12 +62,12 @@ form_gui()
 	#	--field="Checking Disk drives performance:CHK"		\
 	#	--field="Checking 2D/3D-Video performance:CHK"		\
 	#	FALSE TRUE TRUE TRUE FALSE TRUE TRUE FALSE		\
-	#	FALSE FALSE FALSE FALSE FALSE FALSE 2>yad.log)"
+	#	FALSE FALSE FALSE FALSE FALSE FALSE 2>>xorg.log)"
 
 	while :; do
 		i=0
 		# shellcheck disable=SC2207,SC2294
-		val=( $(eval "${args[@]}" 2>yad.log) ) ||
+		val=( $(eval "${args[@]}" 2>>"$xorglog") ) ||
 			i="$?"
 		[ "$i" != 0 ] || [ "${#val[@]}" = 0 ] ||
 			break

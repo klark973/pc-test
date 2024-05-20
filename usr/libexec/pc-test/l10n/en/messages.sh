@@ -53,4 +53,5 @@ L321="Without closing windows of this program, perform testing"
 L321="$L321 according to section %s of the methodology, and indicate"
 L321="$L321 the result here. If the reason for skipping or failing"
 L321="$L321 a test is not obvious, please leave your comments here."
+L322="Result"
 

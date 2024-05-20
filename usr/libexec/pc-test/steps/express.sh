@@ -52,14 +52,11 @@ testcase()
 	local rc="$TEST_PASSED"
 	local idx=$(( $RANDOM % ${#vsamples[@]} ))
 	local random_video="https://youtu.be/${vsamples[$idx]}"
-	local url="file://$helpfile#_экспресс_тест_основных_компонентов"
 
 	. "$libdir"/step-gui.sh
 
-	[ -z "$helpfile" ] ||
-		spawn xdg-open "$url" ||:
-	spawn xdg-open "${local_video_sample:-$random_video}" ||:
-	form_gui || rc="$?"
+	spawn xdg-open "${local_video_sample:-$random_video}" 2>>"$xorglog" ||:
+	form_gui "_экспресс_тест_основных_компонентов" || rc="$?"
 	unset vsamples
 
 	return $rc

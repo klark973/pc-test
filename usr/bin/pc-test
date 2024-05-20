@@ -119,8 +119,9 @@ case "$launchmode" in
 	;;
 esac
 
-# Log of each testing
+# Log files for each testing
 logfile="$workdir/$progname.log"
+xorglog="$workdir/xorg.log"
 
 # New testing
 if [ "$launchmode" = start ]; then
@@ -148,6 +149,7 @@ if [ "$launchmode" = start ]; then
 	: >"$workdir"/STATE/RESULTS
 	cmd_title "$progname $*" |
 		tee -- "$logfile"
+	: >"$xorglog"
 	en_name="Starting program"
 	ru_name="Запуск программы"
 	draw_title_line "$TEST_PASSED" 5 "$(nls_title)" |
