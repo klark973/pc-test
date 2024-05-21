@@ -273,7 +273,7 @@ testcase()
 
 	# ALT SP specific tweak
 	if [ -n "$have_altsp" ] && has_binary integalert; then
-		spawn integalert fix
+		spawn integalert fix ||:
 	fi
 
 	# Resetting systemd journal
