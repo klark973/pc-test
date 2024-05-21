@@ -223,6 +223,18 @@ testcase()
 		have_systemd=1
 	fi
 
+	# 10.2.3. Tweak for Infiniband/RDMA
+	if [ -n "$infb_test" ] && is_pkg_installed libibverbs-utils; then
+		list="ib_ipoib rdma_ucm ib_uverbs ib_umad"
+		list="$list rdma_cm ib_cm ib_mad iw_cm"
+
+		for pkg in $list; do
+			if modinfo "$pkg" &>/dev/null; then
+				echo "$pkg" >>/etc/modules
+			fi
+		done
+	fi
+
 	# 10.9. Tweak for IPMI Managment
 	if [ -n "$ipmi_test" ] && has_binary ipmitool; then
 		cat >>/etc/modules <<-EOF
