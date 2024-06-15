@@ -166,13 +166,21 @@ bold()
 	printf "%s" "$1" |sed -e "s/@BOLD@/$b%s$n/"
 }
 
-# Shows the specified command
+# Shows the specified command or comment
 #
 cmd_title()
 {
 	printf "[${CLR_BOLD}%s${CLR_NORM}] " "$(date '+%T')"
-	[ "$EUID" = 0 ] && printf "${CLR_ERR}#" || printf "${CLR_OK}\$"
-	printf " ${CLR_LC1}%s${CLR_NORM}\n" "$1"
+
+	if [ "${1:0:2}" = ": " ]; then
+		[ "$EUID" = 0 ] && printf "${CLR_ERR}:" ||
+			printf "${CLR_OK}:"
+		printf " ${CLR_LC1}%s${CLR_NORM}\n" "${1:2}"
+	else
+		[ "$EUID" = 0 ] && printf "${CLR_ERR}#" ||
+			printf "${CLR_OK}\$"
+		printf " ${CLR_LC1}%s${CLR_NORM}\n" "$1"
+	fi
 }
 
 # Runs a command with additional logging for debugging purposes
