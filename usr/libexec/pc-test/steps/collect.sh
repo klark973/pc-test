@@ -122,7 +122,7 @@ testcase()
 	spawn lsusb -t |tee lsusb_hierarchy.txt
 
 	# 8.2.8. lscpu
-	spawn lscpu |tee lscpu.txt
+	spawn env LANG=C LC_ALL=C lscpu |tee lscpu.txt
 
 	# 8.2.9. lsblk
 	spawn lsblk -ft |tee lsblk.txt
