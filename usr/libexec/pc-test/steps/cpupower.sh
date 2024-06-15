@@ -289,6 +289,7 @@ testcase()
 	spawn cpupower monitor |tee -a -- "$logfile"
 	spawn cpupower frequency-info -p |tee -a -- "$logfile"
 	spawn cpupower frequency-info -m -f |tee -a -- "$logfile"
+	spawn env LANG=C LC_ALL=C lscpu --extended |tee -a -- "$logfile"
 
 	#
 	# Increasing power and frequency to a maximum
@@ -346,6 +347,7 @@ testcase()
 	spawn cpupower monitor |tee -a -- "$logfile"
 	spawn cpupower frequency-info -p |tee -a -- "$logfile"
 	spawn cpupower frequency-info -m -f |tee -a -- "$logfile"
+	spawn env LANG=C LC_ALL=C lscpu --extended |tee -a -- "$logfile"
 
 	# Comparing the average frequency with the upper limit
 	if [ -n "$scaling" ]; then
@@ -409,6 +411,7 @@ testcase()
 
 	# Showing the state for the last time
 	spawn cpupower frequency-info |tee -a -- "$logfile"
+	spawn env LANG=C LC_ALL=C lscpu --extended |tee -a -- "$logfile"
 
 	return "${rc:-$TEST_PASSED}"
 }
