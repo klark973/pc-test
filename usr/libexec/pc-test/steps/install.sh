@@ -22,7 +22,7 @@ testcase()
 	[ -z "$devel_test" ] ||
 		list="$list sos eject"
 	[ -z "$ifaces" ] ||
-		list="$list iperf3"
+		list="$list iputils iperf3"
 	packages="$list"
 
 	# Install MATE in ALT SP Server
@@ -143,10 +143,17 @@ testcase()
 			else
 				pkg=cheese
 			fi
-			if is_pkg_available "$pkg"; then
-				is_pkg_installed "$pkg" ||
-					packages="$packages $pkg"
-			fi
+
+			# 9. Express autotesting
+			list="$pkg xdotool icon-theme-adwaita"
+			list="$list wmctrl sound-theme-freedesktop"
+
+			for pkg in $list; do
+				if is_pkg_available "$pkg"; then
+					is_pkg_installed "$pkg" ||
+						packages="$packages $pkg"
+				fi
+			done
 		fi
 
 		# 11.2. Graphics performance
@@ -203,6 +210,13 @@ testcase()
 	if [ -n "$fio_test" ] && is_pkg_available fio; then
 		is_pkg_installed fio ||
 			packages="$packages fio"
+	fi
+
+	# Workaround to make Power Management work in a Desktop Environment
+	if [ -n "$have_mate" ] || [ -n "$have_kde5" ] || [ -n "$have_xfce" ]; then
+		if is_pkg_installed acpid-events-power; then
+			deinstall="$deinstall acpid-events-power"
+		fi
 	fi
 
 	# 5. Removing packages

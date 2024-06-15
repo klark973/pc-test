@@ -48,6 +48,9 @@ unsafe_diskperf=
 # When it set, the program will not use the desktop file for autorun
 disable_autorun=
 
+# Real IP or name of the Internet server to check the connection
+ping_server=ya.ru
+
 # A URL pointing to a sample Full HD video for Express-testing
 local_video_sample=
 

@@ -175,8 +175,8 @@ check_uid()
 	if ! grep -qs -- "NOPASSWD: $scriptname" /etc/sudoers; then
 		cat >>/etc/sudoers <<-EOF
 
-		# Allow $username to execute $scriptname without a password
-		$username ALL=(ALL:ALL) NOPASSWD: $scriptname
+		# Allow $username to execute $progname and dmesg
+		$username ALL=(ALL:ALL) NOPASSWD: $scriptname,$(which dmesg)
 		EOF
 
 		flag="$homedir/.local/share/$progname/sudo.UID"

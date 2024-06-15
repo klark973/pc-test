@@ -176,6 +176,7 @@ fi
 # Showing passed steps results and the message about resuming
 if [ "$EUID" != 0 ] || [ -z "$username" ]; then
 	if [ "$launchmode" != start ]; then
+		cd -- "$workdir"/
 		show_results
 		en_name="Resumption of testing"
 		ru_name="Возобновление тестирования"
@@ -183,6 +184,23 @@ if [ "$EUID" != 0 ] || [ -z "$username" ]; then
 			number="$(head -n1 -- "$workdir"/STATE/NUMBER).1"
 		draw_title_line "$TEST_PASSED" "$number" "$(nls_title)" |
 			tee -a -- "$logfile"
+	fi
+
+	# Within X session only
+	if [ -n "${DISPLAY-}" ]
+	then
+		# Stopping automatic updates
+		( killall -TERM DiscoverNotifier ||:
+		  killall -TERM apt-indicator-checker ||:
+		  killall -TERM apt-indicator ||:
+		  killall -TERM discover ||:
+		) &>/dev/null
+
+		# Enabling showing OSD in MATE
+		if [ "${XDG_CURRENT_DESKTOP-}" = MATE ]; then
+			usertype=org.mate.SettingsDaemon.plugins.media-keys
+			spawn gsettings set "$usertype" enable-osd true ||:
+		fi
 	fi
 fi
 

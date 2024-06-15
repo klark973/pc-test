@@ -44,6 +44,7 @@ Requires: bash update-kernel pciutils usbutils iproute2
 #Requires: eject
 #Requires: sos
 #Requires: system-report
+#Requires: iputils
 #Requires: iperf3
 #Requires: acpica
 #Requires: dmidecode
@@ -61,6 +62,10 @@ Requires: bash update-kernel pciutils usbutils iproute2
 #Requires: kamoso
 #Requires: vlc
 #Requires: cheese
+#Requires: xdotool
+#Requires: wmctrl
+#Requires: icon-theme-adwaita
+#Requires: sound-theme-freedesktop
 #Requires: fprintd
 #Requires: pcsc-lite-ccid
 #Requires: libpcsclite
@@ -108,6 +113,15 @@ EOF
 %install
 mkdir -p -m 0755 -- "%buildroot"
 cp -aRf etc usr var "%buildroot/"
+
+%post
+# This is necessary to update the settings of older versions
+a="^(# Allow \\w+ to execute) %_bindir/%name without a password$"
+b="\\1 %name and dmesg"
+sed -i -E "s|$a|$b|g" /etc/sudoers
+a="^(\\w+ ALL=\\(ALL:ALL\\) NOPASSWD: %_bindir/%name)$"
+b="\\1,$(which dmesg)"
+sed -i -E "s|$a|$b|g" /etc/sudoers
 
 %check
 ./check-scripts.sh

@@ -284,9 +284,14 @@ show_results()
 		return 0
 
 	while read -r rc step; do
+		eval "${step}_show_results() {
+			: Do nothing by default
+		}"
+
 		. "$libdir/steps/$step.sh"
 
 		title="$(nls_title)"
+		${step}_show_results "$rc"
 		draw_title_line "$rc" "${number-1}" "$title"
 	done <"$workdir"/STATE/RESULTS
 }
@@ -416,5 +421,22 @@ write_config()
 	[ "$EUID" != 0 ] || [ -z "$username" ] ||
 		chown -- "$username":"$username" "$sf"
 	return 0
+}
+
+# Checks Internet connection
+#
+check_internet()
+{
+	local rc=0 tmpf
+
+	spawn : Internet connection
+	tmpf="$(spawn mktemp -qt -- "$progname-XXXXXXXX.tmp")"
+	spawn ping -c4 -W10 -- "$ping_server" |tee -- "$tmpf"
+	grep -qs -- ', 0% packet loss,' "$tmpf" || rc=1
+	[ ! -f "$logfile" ] ||
+		cat -- "$tmpf" >>"$logfile"
+	spawn rm -f -- "$tmpf"
+
+	return $rc
 }
 
