@@ -6,8 +6,8 @@
 %endif
 
 Name: pc-test
-Version: 2.1.0
-Release: alt5
+Version: 2.1.1
+Release: alt1
 
 Summary: PC Test Suite
 Group: System/Configuration/Hardware
@@ -138,6 +138,21 @@ sed -i -E "s|$a|$b|g" /etc/sudoers
 %doc img html CHANGELOG.md LICENSE README.md
 
 %changelog
+* Sun Jun 16 2024 Leonid Krivoshein <klark@altlinux.org> 2.1.1-alt1
+- Added:
+  + CPU Performance Scaling modes test according to section 10.1
+  + an express test according to section 9
+  + possibility of manual testing
+  + testing methodology v2.1 (HTML5) and Changelog
+  + ability to use personal settings by the regular user
+  + automatic OS updates are now disabled during testing
+  + ability to show subtest results
+  + many improvements in logging output
+- Fixed:
+  + fix to not skip glmark test on ALT SP Server
+  + fix a very strange fault when saving status
+  + fix to reload en_US messages correctly
+
 * Sun May 05 2024 Leonid Krivoshein <klark@altlinux.org> 2.1.0-alt5
 - Initial build for Sisyphus.
 
