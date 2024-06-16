@@ -24,8 +24,5 @@ testcase()
 
 	# Removing an empty log
 	[ -s "$xorglog" ] || spawn rm -f -- "$xorglog"
-
-	# Showing version of this program
-	spawn "$progname" --version |tee version.txt
 }
 

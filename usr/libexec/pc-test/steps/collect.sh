@@ -21,6 +21,9 @@ testcase()
 		export LANG=C
 	fi
 
+	# Showing version of this program
+	spawn "$progname" --version |tee version.txt
+
 	# 8.2.1. inxi
 	if [ -n "$colormode" ]; then
 		spawn inxi -v8 -c2 |tee inxi.txt
