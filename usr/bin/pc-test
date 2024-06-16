@@ -296,7 +296,7 @@ else
 	printf "$(bold "$status")\n" "$stepname"
 
 	# Creating an archive
-	mv -f STATE/settings.ini ./ && rm -rf STATE
+	mv -f STATE/RESULTS STATE/settings.ini ./ && rm -rf STATE
 	cd .. && tar -cf "$HOME/$stepname" "${workdir##*/}"
 
 	# Moving archive to the server
