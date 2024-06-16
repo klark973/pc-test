@@ -198,5 +198,15 @@ testcase()
 			fi
 		fi
 	fi
+
+	# PulseAudio configuration
+	if [ -n "$devel_test" ] && has_binary pactl; then
+		spawn env LANG=C LC_ALL=C pactl list sinks >pa-sinks.log
+	fi
+
+	# PipeWire configuration
+	if [ -n "$devel_test" ] && has_binary pw-dump; then
+		spawn env LANG=C LC_ALL=C pw-dump --color=always >pw-dump.json
+	fi
 }
 
