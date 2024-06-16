@@ -25,8 +25,8 @@ testcase()
 	dmesg | grep -isE -- "$filter" |
 		grep -vs ' Command line: ' |
 		grep -vs ' Kernel command line: ' |
-		gzip -9 >dmesg_err.gz
-	spawn dmesg -H -P --color=always |gzip -9 >dmesg.gz
+		gzip -9qnc >dmesg_err.gz
+	spawn dmesg -H -P --color=always |gzip -9qnc >dmesg.gz
 
 	# All other for systemd only
 	if [ -z "$have_systemd" ]; then
@@ -34,11 +34,11 @@ testcase()
 	fi
 
 	# 7.3. failed services only
-	spawn systemctl --failed |gzip -9 >systemctl_err.gz
+	spawn systemctl --failed |gzip -9qnc >systemctl_err.gz
 
 	# 7.4. systemd journal and errors
-	spawn journalctl -b |gzip -9 >journal.gz
-	spawn journalctl -p err -b |gzip -9 >journal_err.gz
+	spawn journalctl -b |gzip -9qnc >journal.gz
+	spawn journalctl -p err -b |gzip -9qnc >journal_err.gz
 
 	# Additional systemd information
 	if [ -n "$devel_test" ] && has_binary systemd-analyze; then

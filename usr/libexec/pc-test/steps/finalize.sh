@@ -20,7 +20,7 @@ testcase()
 	fi
 
 	# 10.11. Final check of kernel messages
-	spawn dmesg -H -P -T --color=always |gzip -9 >dmesg_final.gz
+	spawn dmesg -H -P -T --color=always |gzip -9qnc >dmesg_final.gz
 
 	# Removing an empty log
 	[ -s "$xorglog" ] || spawn rm -f -- "$xorglog"
