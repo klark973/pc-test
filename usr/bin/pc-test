@@ -44,6 +44,9 @@ readonly TEST_RUNNING=131
 . "$libdir"/common.sh
 . "$libdir"/parser.sh
 
+# Unrewritable via settings.ini
+retestno=
+
 # Catching unexpected errors
 trap 'unexpected_error "$LINENO" "${BASH_SOURCE[0]}"' ERR
 
@@ -117,11 +120,30 @@ case "$launchmode" in
 		launchmode=start
 	fi
 	;;
+
+"retest")
+	if [ -L "$lastdir" ] &&
+	   [ ! -d "$lastdir"/STATE ] &&
+	   [ -s "$lastdir"/RESULTS ] &&
+	   [ -s "$lastdir"/settings.ini ] &&
+	   [ -s "$lastdir/$progname.log" ] &&
+	   grep -qsE "^${retestno}\s" "/var/lib/$progname/numbers.txt"
+	then
+		workdir="$(realpath -- "$lastdir")"
+	else
+		testplan="The specified test \'%s\' cannot be retaken at this time."
+		fatal F18 "$testplan" "$retestno"
+	fi
+	;;
 esac
 
 # Log files for each testing
 logfile="$workdir/$progname.log"
 xorglog="$workdir/xorg.log"
+
+# Starting titles
+en_name="Starting program"
+ru_name="Запуск программы"
 
 # New testing
 if [ "$launchmode" = start ]; then
@@ -150,14 +172,49 @@ if [ "$launchmode" = start ]; then
 	cmd_title "$progname $*" |
 		tee -- "$logfile"
 	: >"$xorglog"
-	en_name="Starting program"
-	ru_name="Запуск программы"
 	draw_title_line "$TEST_PASSED" 5 "$(nls_title)" |
 		tee -a -- "$logfile"
 	copy_desktop_file
 	write_config
-else
-	# Overriding system settings first time
+elif [ "$launchmode" = retest ]; then
+	stepname="$(sed -n -E "s/^${retestno}\s+//p" \
+			/var/lib/"$progname"/numbers.txt)"
+	testplan="The specified test \'%s\' cannot be retaken at this time."
+
+	. "$workdir"/settings.ini
+
+	[ -n "$stepname" ] ||
+		fatal F18 "$testplan" "$retestno"
+	[ -s "$libdir/steps/$stepname.sh" ] ||
+		fatal F19 "Step script \'%s.sh\' not found." "$stepname"
+	mkdir -p -- "$workdir"/STATE
+	: >"$workdir"/STATE/start.txt
+	cat "/var/lib/$progname/start.txt" "/var/lib/$progname/finish.txt" |
+		grep -sE "\s${stepname}$" >"$workdir"/STATE/finish.txt
+	printf "%s\n" "$stepname" >"$workdir"/STATE/STEP
+	printf "%s\n" "$retestno" >"$workdir"/STATE/NUMBER
+	mv -f -- "$workdir"/settings.ini "$workdir"/STATE/
+	mv -f -- "$workdir"/RESULTS "$workdir"/STATE/
+	cmd_title "$progname $*" |
+		tee -a -- "$logfile"
+	[ -f "$xorglog" ] ||
+		: >"$xorglog"
+	draw_title_line "$TEST_PASSED" "$retestno" "$(nls_title)" |
+		tee -a -- "$logfile"
+	copy_desktop_file
+
+	eval "${stepname}_reset_results() {
+		: Do nothing by default
+	}"
+
+	. "$libdir/steps/$stepname.sh"
+
+	cd -- "$workdir"/
+	${stepname}_reset_results
+fi
+
+# Overriding system settings first time
+if [ "$launchmode" != start ]; then
 	[ ! -s "$workdir"/STATE/settings.ini ] ||
 		. "$workdir"/STATE/settings.ini
 	nls_config messages
@@ -216,7 +273,7 @@ while :; do
 		break
 	stepname="$(head -n1 STATE/STEP)"
 	[ -n "$stepname" ] && [ -s "$libdir/steps/$stepname.sh" ] ||
-		fatal F18 "Step script \'%s.sh\' not found." "$stepname"
+		fatal F19 "Step script \'%s.sh\' not found." "$stepname"
 	usertype="$(grep -sE "\s${stepname}$" "STATE/$testplan" |cut -f1)"
 	[ -n "$usertype" ] ||
 		break

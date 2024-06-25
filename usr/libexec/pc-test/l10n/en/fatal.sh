@@ -26,5 +26,6 @@ F00=1
 #F15="The program launch mode already specified: \'%s\'."
 #F16="You must be root for using --uid=<UID>."
 #F17="Invalid user ID: \'%s\'."
-#F18="Step script \'%s.sh\' not found."
+#F18="The specified test \'%s\' cannot be retaken at this time."
+#F19="Step script \'%s.sh\' not found."
 

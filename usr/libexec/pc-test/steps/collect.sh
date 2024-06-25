@@ -8,7 +8,7 @@
 ### Collecting information ###
 ##############################
 
-number=8.2
+number=8
 en_name="Collecting information about hardware"
 ru_name="Сбор информации о системе и оборудовании"
 

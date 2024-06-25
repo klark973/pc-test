@@ -1,0 +1,9 @@
+5.3	detect
+5.4	config
+7	syslogs
+8	collect
+9	express
+10.1	cpupower
+11.1	diskperf
+11.2	glmark
+10.11	finalize

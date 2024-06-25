@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Ability to reset subtest results
+- Possibility to retest a previously completed test
+
 ## [2.1.1-alt1] - 2024-06-16
 
 ### Added

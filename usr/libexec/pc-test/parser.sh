@@ -12,8 +12,8 @@ parse_cmdline()
 {
 	local l_opts="auto,continue,finish,start,batch,color:,date:,name:"
 	      l_opts="$l_opts,no-autorun,no-sources,no-update,update,uid:"
-	      l_opts="$l_opts,desktop-icon,version,help"
-	local s_opts="+ACFSbc:d:n:vh"
+	      l_opts="$l_opts,test:,desktop-icon,version,help"
+	local s_opts="+ACFST:bc:d:n:vh"
 	local msg
 
 	l_opts=$(getopt -n "$progname" -o "$s_opts" -l "$l_opts" -- "$@") ||
@@ -32,6 +32,12 @@ parse_cmdline()
 			;;
 		-S|--start)
 			set_launch start
+			;;
+		-T|--test)
+			[ -n "${2-}" ] ||
+				show_usage
+			set_launch retest "$2"
+			shift
 			;;
 		-b|--batch)
 			batchmode=1
@@ -151,6 +157,8 @@ set_launch()
 
 	[ -z "$launchmode" ] ||
 		show_usage F15 "$msg" "$launchmode"
+	[ "$1" != retest ] ||
+		retestno="$2"
 	launchmode="$1"
 }
 

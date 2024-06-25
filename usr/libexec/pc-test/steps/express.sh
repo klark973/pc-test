@@ -773,3 +773,39 @@ express_show_results()
 	draw_title_line "$rc" "$number.7" "$name"
 }
 
+express_reset_results()
+{
+	local f files=( )
+
+	local list=(
+		express.step
+		EXPRESS-AUTOTEST
+		POWEROFF-STARTED
+		REBOOT-STARTED
+		HIBERNATE-STARTED
+		SUSPEND-STARTED
+		POWEROFF-FINISHED
+		REBOOT-FINISHED
+		HIBERNATE-FINISHED
+		SUSPEND-FINISHED
+		POWEROFF-FAILED
+		REBOOT-FAILED
+		HIBERNATE-FAILED
+		SUSPEND-FAILED
+		NETWORK-FAILED
+		WIFI-FAILED
+		WIFI-PASSED
+		h.dmesg.gz
+		s.dmesg.gz
+		h.status
+		s.status
+	)
+
+	for f in "${list[@]}"; do
+		[ ! -f ./"$f" ] ||
+			files+=( "./$f" )
+	done
+
+	[ "${#files[@]}" = 0 ] || spawn rm -f "${files[@]}"
+}
+

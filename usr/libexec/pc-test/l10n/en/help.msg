@@ -5,6 +5,7 @@ Options:
   -C, --continue    Continue previously started testing.
   -F, --finish      Finish previously started testing.
   -S, --start       Start new testing.
+  -T, --test=<#>    Run the test again at the specified number.
   -b, --batch       Do not use input and dialogs for settings.
   -c, --color=<M>   Change console color mode:
                     "auto": auto-detection mode, used by default;
