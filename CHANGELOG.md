@@ -1,11 +1,20 @@
 # Changelog
 
-## [Unreleased]
+## [2.1.2-alt1] - 2024-06-26
 
 ### Added
 
 - Ability to reset subtest results
 - Possibility to retest a previously completed test
+- Collect PulseAudio and PipeWire configuration
+
+### Fixed
+
+- Now all pc-test results are also saved
+- Pack input data into gzip archives safer
+- Show and save pc-test version earlier
+
+[2.1.2-alt1]: https://github.com/klark973/pc-test/releases/tag/2.1.2-alt1
 
 ## [2.1.1-alt1] - 2024-06-16
 
