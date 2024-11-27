@@ -43,10 +43,18 @@ pre()
 	[ -s /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga ] &&
 	[ -s /usr/share/icons/Adwaita/32x32/legacy/audio-volume-muted.png ] ||
 		return $TEST_BLOCKED
-	spawn ip route |grep -qsE '^default via ' ||
-		return $TEST_BLOCKED
+	p=0
+	spawn : Waiting for network connection...
+	while [ "$p" -lt 50 ]; do
+		if ip route |grep -qsE '^default via '; then
+			spawn : Network connection established, counter=$p
+			return $TEST_ALLOWED
+		fi
+		sleep .3
+		p="$((1 + $p))"
+	done
 
-	return $TEST_ALLOWED
+	return $TEST_BLOCKED
 }
 
 testcase()
