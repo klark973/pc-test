@@ -470,7 +470,7 @@ express_try_hibernate()
 
 	if [ -s ./HIBERNATE-STARTED ]; then
 		express_save_date HIBERNATE-FAILED
-		spawn sleep 15
+		spawn sleep 45
 	else
 		msg="${L257-Checking ACPI/S4 (Hibernation)}..."
 		spawn notify-send "$(nls_title)" "$msg"
@@ -479,6 +479,7 @@ express_try_hibernate()
 
 		if ! spawn systemctl -i hibernate; then
 			express_save_date HIBERNATE-FAILED
+			spawn sleep 40
 		else
 			express_pause
 			express_save_date HIBERNATE-FINISHED
@@ -523,7 +524,7 @@ express_try_suspend()
 
 	if [ -s ./SUSPEND-STARTED ]; then
 		express_save_date SUSPEND-FAILED
-		spawn sleep 15
+		spawn sleep 45
 	else
 		msg="${L258-Checking ACPI/S3 (Suspend to RAM)}..."
 		spawn notify-send "$(nls_title)" "$msg"
@@ -532,6 +533,7 @@ express_try_suspend()
 
 		if ! spawn systemctl -i suspend; then
 			express_save_date SUSPEND-FAILED
+			spawn sleep 40
 		else
 			express_pause
 			express_save_date SUSPEND-FINISHED
@@ -601,6 +603,9 @@ express_additional_hw()
 		spawn notify-send "$(nls_title)" "$msg"
 		spawn nmcli c up "$active_ethernet" ||:
 		spawn sleep 10
+	else
+		# Pause after suspend or hibernate for single connection
+		spawn sleep "$t"
 	fi
 
 	# Checking the Internet connection
@@ -663,11 +668,11 @@ express_save_date()
 
 express_pause()
 {
-	local s0 s1=0 pause=10
+	local s0 s1=0 pause=30
 
 	s0="$(date +%s)"
 
-	while [ "$(( $s1 - $s0 ))" -lt "$pause" ]; do
+	while [ "$(( $s0 + $pause ))" -gt "$s1" ]; do
 		false || sleep .4
 		s1="$(date +%s)"
 	done
