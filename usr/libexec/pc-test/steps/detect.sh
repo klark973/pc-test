@@ -204,8 +204,6 @@ cando_express_test()
 		return 1
 	spawn inxi -G -c0 |grep -qs ' Device-1: ' ||
 		return 1
-	spawn inxi -Gxx -c0 |grep -qs ' Monitor-1: ' ||
-		return 1
 	return 0
 }
 
