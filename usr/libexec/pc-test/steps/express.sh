@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 #######################################
 ### Express test of main components ###
@@ -60,9 +60,10 @@ pre()
 testcase()
 {
 	local idx random_video vsamples
+	local vset="${express_video_set:-youtube}"
 
 	# shellcheck disable=SC2207
-	vsamples=( $(< "/var/lib/$progname/vsamples.txt") )
+	vsamples=( $(< "/var/lib/$progname/$vset.txt") )
 	idx=$(( $RANDOM % ${#vsamples[@]} ))
 
 	# Running an autotest

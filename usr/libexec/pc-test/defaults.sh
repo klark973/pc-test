@@ -51,6 +51,9 @@ disable_autorun=
 # Real IP or name of the Internet server to check the connection
 ping_server=ya.ru
 
+# Name of the set of randomly selected videos
+express_video_set=youtube
+
 # A URL pointing to a sample Full HD video for Express-testing
 local_video_sample=
 
