@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.1.2-alt2] - 2024-11-28
+
+### Fixed
+
+- Added 15 sec timeout for slow Wi-Fi connections
+- Do not check monitors for express testing anymore
+- Added and increased timeouts between operations
+
+[2.1.2-alt2]: https://github.com/klark973/pc-test/releases/tag/2.1.2-alt2
+
 ## [2.1.2-alt1] - 2024-06-26
 
 ### Added
