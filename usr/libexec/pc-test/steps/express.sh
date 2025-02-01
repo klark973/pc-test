@@ -59,22 +59,6 @@ pre()
 
 testcase()
 {
-	local idx vsamples
-	local v="$local_video_sample"
-
-	# shellcheck disable=SC2207
-	vsamples=( $(< "/var/lib/$progname/${express_video_set}.txt") )
-	idx=$(( $RANDOM % ${#vsamples[@]} ))
-
-	# Select random video
-	if [ -z "$v" ]; then
-		case "$express_video_set" in
-		youtube)  v="https://youtu.be/${vsamples[$idx]}";;
-		rutube)	  v="https://rutube.ru/video/${vsamples[$idx]}/";;
-		esac
-		v="${v:-https://ya.ru/video/preview/14399646464678007768}"
-	fi
-
 	# Running an autotest
 	if express_choice_form; then
 		express_autotest || return "$?"
@@ -82,11 +66,37 @@ testcase()
 		# Starting manual testing
 		. "$libdir"/step-gui.sh
 
-		spawn xdg-open "$v" 2>>"$xorglog" ||:
+		spawn xdg-open "$(express_video_url)" 2>>"$xorglog" ||:
 		form_gui "_экспресс_тест_основных_компонентов" || return "$?"
 	fi
 
 	return $TEST_PASSED
+}
+
+express_video_url()
+{
+	local vsamples url="$local_video_sample"
+	local idx="/var/lib/$progname/$express_video_set.txt"
+
+	# Select random video
+	if [ -z "$url" ] && [ -s "$idx" ]; then
+		# shellcheck disable=SC2207
+		vsamples=( $(< "$idx") )
+		idx=$(( $RANDOM % ${#vsamples[@]} ))
+		vsamples="${vsamples[$idx]}"
+
+		if [ -n "$vsamples" ]; then
+			case "$express_video_set" in
+			youtube)  url="https://youtu.be/$vsamples";;
+			rutube)   url="https://rutube.ru/video/$vsamples/";;
+			esac
+		fi
+	fi
+
+	# Set video as default
+	url="${url:-https://ya.ru/video/preview/14399646464678007768}"
+
+	printf "%s" "$url"
 }
 
 express_choice_form()
@@ -228,11 +238,10 @@ express_try_poweroff()
 
 express_autotest_init()
 {
-	local i keys=( Tab Tab m f )
+	local i url
 
-	random_video="https://www.youtube.com/embed/${vsamples[$idx]}"
-	random_video="${random_video}?autoplay=1&controls=1&enablejsapi=1"
-	random_video="${random_video}&cc_load_policy=1&mute=1&rel=0"
+	# Setting video URL
+	url="$(express_video_url)"
 
 	# First we read the DE settings
 	if has_binary xdg-settings; then
@@ -287,34 +296,17 @@ express_autotest_init()
 	express_set_audio_volume 50
 
 	# Opening a browser window with the selected video
-	spawn : Running $browser "${local_video_sample:-$random_video}"
-	$browser "${local_video_sample:-$random_video}" 2>>"$xorglog" & brpid="$!"
-
-	if [ -z "$local_video_sample" ]; then
-		i="The video starts without sound, no need to press anything!"
-		spawn notify-send "$(nls_title)" "${L254-$i}"
-	fi
-
-	i=0
+	i="Start playing the video, turn on the sound in the player,"
+	i="$i set the video resolution to the appropriate quality,"
+	i="$i you don\'t need to press anything else!"
+	spawn : Running $browser "$url"
+	$browser "$url" 2>>"$xorglog" & brpid="$!"
+	spawn notify-send "$(nls_title)" "${L254-$i}"
 	spawn sleep 15
 
-	# With a local video sample, we
-	# only maximize the browser window
-	if [ -n "$local_video_sample" ]; then
-		spawn xdotool search --sync --onlyvisible --class "$class" \
-			windowactivate key F11 sleep 0.3 keyup F11 sleep 0.5
-		i="${#keys[@]}"
-	fi
-
-	# Unmuting sound in YouTube player
-	# and expanding window to full screen
-	while [ "$i" -lt "${#keys[@]}" ]; do
-		spawn xdotool search --sync --onlyvisible \
-			--class "$class" windowactivate \
-			key "${keys[$i]}" sleep 0.3 \
-			keyup "${keys[$i]}" sleep 0.5
-		i=$((1 + $i))
-	done
+	# Maximizing browser window
+	spawn xdotool search --sync --onlyvisible --class "$class" \
+		windowactivate key F11 sleep 0.3 keyup F11 sleep 0.5
 
 	return $TEST_PASSED
 }
@@ -453,13 +445,8 @@ express_show_settings()
 	spawn sleep 15
 
 	# Normalizing a window with the selected video
-	if [ -n "$local_video_sample" ]; then
-		spawn xdotool search --sync --onlyvisible --class "$class" \
-			windowactivate key F11 sleep 0.3 keyup F11 sleep 0.5
-	else
-		spawn xdotool search --sync --onlyvisible --class "$class" \
-			windowactivate key f sleep 0.3 keyup f sleep 0.5
-	fi
+	spawn xdotool search --sync --onlyvisible --class "$class" \
+		windowactivate key F11 sleep 0.3 keyup F11 sleep 0.5
 
 	# Maximizing a window with the selected video
 	args="$(spawn xdotool search --sync --class "$class" getwindowpid |head -n1)"
@@ -578,7 +565,7 @@ express_try_suspend()
 
 express_resume_player()
 {
-	# Autoplay in a chromium-based browser whith the YouTube player
+	# Autoplay in chromium-based browser using most popular players
 	if [ -z "$local_video_sample" ] && [ "$class" = chromium ]; then
 		spawn xdotool search --sync --onlyvisible --class "$class" \
 			windowactivate key XF86AudioPlay sleep 0.3 keyup XF86AudioPlay

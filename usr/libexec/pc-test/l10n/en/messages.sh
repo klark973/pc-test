@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 #################################
 ### Messages for en_US locale ###
@@ -40,7 +40,9 @@ L250="Sound muted"
 L251="Mute"
 L252="Level"
 L253="Volume level"
-L254="The video starts without sound, no need to press anything!"
+L254="Start playing the video, turn on the sound in the player,"
+L254="$L254 set the video resolution to the appropriate quality,"
+L254="$L254 you don\'t need to press anything else!"
 L255="Switching back to the wired connection..."
 L256="Now you can continue testing in manual mode, using the mouse,"
 L256="$L256 function keys, moving the video window to other monitors,"
