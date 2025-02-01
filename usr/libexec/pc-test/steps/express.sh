@@ -59,12 +59,21 @@ pre()
 
 testcase()
 {
-	local idx random_video vsamples
-	local vset="${express_video_set:-youtube}"
+	local idx vsamples
+	local v="$local_video_sample"
 
 	# shellcheck disable=SC2207
-	vsamples=( $(< "/var/lib/$progname/$vset.txt") )
+	vsamples=( $(< "/var/lib/$progname/${express_video_set}.txt") )
 	idx=$(( $RANDOM % ${#vsamples[@]} ))
+
+	# Select random video
+	if [ -z "$v" ]; then
+		case "$express_video_set" in
+		youtube)  v="https://youtu.be/${vsamples[$idx]}";;
+		rutube)	  v="https://rutube.ru/video/${vsamples[$idx]}/";;
+		esac
+		v="${v:-https://ya.ru/video/preview/14399646464678007768}"
+	fi
 
 	# Running an autotest
 	if express_choice_form; then
@@ -73,8 +82,7 @@ testcase()
 		# Starting manual testing
 		. "$libdir"/step-gui.sh
 
-		random_video="https://youtu.be/${vsamples[$idx]}"
-		spawn xdg-open "${local_video_sample:-$random_video}" 2>>"$xorglog" ||:
+		spawn xdg-open "$v" 2>>"$xorglog" ||:
 		form_gui "_экспресс_тест_основных_компонентов" || return "$?"
 	fi
 

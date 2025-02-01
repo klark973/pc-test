@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ########################
 ### Default settings ###
@@ -52,7 +52,7 @@ disable_autorun=
 ping_server=ya.ru
 
 # Name of the set of randomly selected videos
-express_video_set=youtube
+express_video_set=rutube
 
 # A URL pointing to a sample Full HD video for Express-testing
 local_video_sample=
