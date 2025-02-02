@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.1.3-alt1] - 2025-02-02
+
+### Added
+
+- Added support for p11 and ALT SP 10.2 (c10f2)
+- Added the ability to replace a set of videos
+- Added 20 new video samples and switch to RuTube
+- Added the ability to use custom sets of video
+
+### Fixed
+
+- Removed player control in the browser window
+- Closed bug: https://bugzilla.altlinux.org/52843
+
+[2.1.3-alt1]: https://github.com/klark973/pc-test/releases/tag/2.1.3-alt1
+
 ## [2.1.2-alt2] - 2024-11-28
 
 ### Fixed
