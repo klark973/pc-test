@@ -6,8 +6,8 @@
 %endif
 
 Name: pc-test
-Version: 2.1.2
-Release: alt2
+Version: 2.1.3
+Release: alt1
 
 Summary: PC Test Suite
 Group: System/Configuration/Hardware
@@ -140,6 +140,17 @@ sed -i -E "s|$a|$b|g" /etc/sudoers
 %doc img html CHANGELOG.md LICENSE README.md
 
 %changelog
+* Sun Feb 02 2025 Leonid Krivoshein <klark@altlinux.org> 2.1.3-alt1
+- Added:
+  + add support for p11 and ALT SP 10.2 (c10f2)
+  + add the ability to replace a set of videos
+  + add 20 new video samples from the RuTube.RU
+  + add the ability to use custom sets of video
+- Fixed:
+  + remove player control in the browser window
+  + install some pulseaudio packages for sound tests
+  + switch to the RuTube.RU by default (ALT #52843)
+
 * Thu Nov 28 2024 Leonid Krivoshein <klark@altlinux.org> 2.1.2-alt2
 - Fixed:
   + add 15 sec timeout for slow Wi-Fi connections
