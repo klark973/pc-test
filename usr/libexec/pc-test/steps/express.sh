@@ -91,16 +91,15 @@ express_video_url()
 		# shellcheck disable=SC2207
 		vsamples=( $(< "$idx") )
 		idx=$(( $RANDOM % ${#vsamples[@]} ))
-		vsamples="${vsamples[$idx]}"
 
-		if [ -n "$vsamples" ] &&
+		if [ -n "${vsamples[$idx]}" ] &&
 		   grep -qsE "^$express_video_set\s+" "$vbase"
 		then
 			# shellcheck disable=SC2002
 			url="$(cat -- "$vbase" |
 				sed -n -E "s/^$express_video_set\s+//p" |
 				tail -n1 |
-				sed "s|@VURL@|$vsamples|")"
+				sed "s|@VURL@|${vsamples[$idx]}|")"
 		fi
 	fi
 

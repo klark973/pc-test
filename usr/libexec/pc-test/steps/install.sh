@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ########################################
 ### Second part of the system update ###
@@ -73,13 +73,15 @@ testcase()
 	fi
 
 	# 10.4. Sound Cards
-	if [ -n "$sound_test" ] && is_pkg_available aplay; then
-		if is_pkg_available alsa-utils; then
-			is_pkg_installed alsa-utils ||
-				packages="$packages alsa-utils"
-			is_pkg_installed aplay ||
-				packages="$packages aplay"
-		fi
+	if [ -n "$sound_test" ] || [ -n "$webcam_test" ]; then
+		list="alsa-utils aplay pulseaudio-daemon pulseaudio-utils"
+
+		for pkg in $list; do
+			if is_pkg_available "$pkg"; then
+				is_pkg_installed "$pkg" ||
+					packages="$packages $pkg"
+			fi
+		done
 	fi
 
 	# 10.7.2. Power Managment by console

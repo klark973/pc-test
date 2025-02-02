@@ -49,9 +49,9 @@ testcase()
 	spawn apt-get update
 
 	for try in 1 2 3; do
-		[ -L /bin -o -L /lib ] ||
 		[ -z "$dist_upgrade" ] ||
 		[ "$repo" != Sisyphus ] ||
+		[ -L /bin ] || [ -L /lib ] ||
 		is_pkg_installed usrmerge-hier-convert ||
 		! is_pkg_available usrmerge-hier-convert ||
 			spawn apt-get install -y usrmerge-hier-convert || rc="$?"

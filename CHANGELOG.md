@@ -12,6 +12,7 @@
 ### Fixed
 
 - Removed player control in the browser window
+- Install some pulseaudio packages for sound tests
 - Closed bug: https://bugzilla.altlinux.org/52843
 
 [2.1.3-alt1]: https://github.com/klark973/pc-test/releases/tag/2.1.3-alt1
