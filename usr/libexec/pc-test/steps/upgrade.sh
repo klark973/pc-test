@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ###########################################
 ### The first part of the system update ###
@@ -15,6 +15,7 @@ ru_name="Обновление системы и ядра"
 altsp_mirrors=(
 	http://update.altsp.su/pub/distributions/ALTLinux
 	ftp://update.altsp.su/pub/distributions/ALTLinux
+	rsync://update.altsp.su/ALTLinux
 )
 
 public_mirrors=(
@@ -48,6 +49,7 @@ testcase()
 	spawn apt-get update
 
 	for try in 1 2 3; do
+		[ -L /bin -o -L /lib ] ||
 		[ -z "$dist_upgrade" ] ||
 		[ "$repo" != Sisyphus ] ||
 		is_pkg_installed usrmerge-hier-convert ||
@@ -68,17 +70,21 @@ testcase()
 		rc=0
 	done
 
-	# On ALT SP v8.2/c9f1 only
-	if [ -n "$update_apt_lists" ]; then
-		if [ -n "$have_altsp" ] && [ "$repo" = c9f1 ]; then
+	# Only with ALT SP update
+	if [ -n "$have_altsp" ]
+	then
+		# On ALT SP v10.0 or v10.2
+		if [ "$repo" = c10f1 ] || [ "$repo" = c10f2 ]; then
+			spawn apt-mark manual update-kernel ||:
+
+		# On ALT SP v8.2/c9f1 only
+		elif [ -n "$update_apt_lists" ] && [ "$repo" = c9f1 ]; then
 			spawn rm -f /etc/apt/preferences
 			spawn apt-get update
 		fi
 	fi
 
-	# Core packages must be installed before setup.
-	# NOTE: yad absent in sisyphus_riscv64 for now.
-	#
+	# Core packages must be installed before setup
 	is_pkg_installed inxi ||
 		packages=inxi
 	if [ -n "$have_xorg" ] &&
@@ -266,7 +272,8 @@ write_sources()
 		arepo=
 		;;
 
-	p10)	# Platform 10
+	p10|p11)
+		# Platforms 10 and 11
 		first="classic gostcrypto"
 		vendor="$repo"
 		;;
@@ -284,7 +291,13 @@ write_sources()
 		esac
 		;;
 
-	c10f1)	# ALT SP v10.1 (Mar 2023)
+	c10f2)	# ALT SP v10.2 (Nov 2024)
+		[ -n "$mirror" ] ||
+			branch=c10f2/branch
+		first="classic gostcrypto"
+		;;
+
+	c10f1)	# ALT SP v10.0 (Mar 2023)
 		[ -n "$mirror" ] ||
 			branch=c10f/branch
 		first="classic gostcrypto"

@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 #####################################
 ### Preparing for a system update ###
@@ -116,6 +116,7 @@ testcase()
 		8.2)	repo=c9f1;;
 		8.4)	repo=c9f2;;
 		10)	repo=c10f1;;
+		10.2)	repo=c10f2;;
 		*)	fatal F08 "Unsupported certified distro: %s" "$p";;
 		esac
 	elif [ -z "$repo" ]; then
@@ -125,6 +126,9 @@ testcase()
 			;;
 		10|10.*|p10)
 			repo=p10
+			;;
+		11|11.*|p11)
+			repo=p11
 			;;
 		*)	fatal F09 "Unsupported distro version: %s" "$p";;
 		esac

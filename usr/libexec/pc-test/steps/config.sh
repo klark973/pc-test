@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ###############################
 ### Test plan configuration ###
@@ -37,10 +37,13 @@ testcase()
 		can_install_mate=
 
 		# ALT SP Server 10 can have MATE (optional)
-		if [ -n "$have_altsp" ] && [ -z "$have_xorg" ] &&
-			[ "$distro" = SRV ] && [ "$repo" = c10f1 ]
+		if [ -n "$have_altsp" ] &&
+		   [ -z "$have_xorg" ] &&
+		   [ "$distro" = SRV ]
 		then
-			can_install_mate=1
+			if [ "$repo" = c10f1 ] || [ "$repo" = c10f2 ]; then
+				can_install_mate=1
+			fi
 		fi
 
 		. "$libdir"/steps/config-form-tui.sh
