@@ -75,21 +75,32 @@ testcase()
 
 express_video_url()
 {
-	local vsamples url="$local_video_sample"
-	local idx="/var/lib/$progname/$express_video_set.txt"
+	local idx vsamples vbase url="$local_video_sample"
+
+	# Alternatively, it is preferable to use a user-defined set
+	idx="${homedir:-$HOME}/.config/$progname-$express_video_set.txt"
+	[ -s "$idx" ] || idx="/etc/$progname-$express_video_set.txt"
+	[ -s "$idx" ] || idx="/var/lib/$progname/$express_video_set.txt"
+	vbase="${homedir:-$HOME}/.config/$progname-RVSETS.txt"
+	[ -s "$vbase" ] || vbase="/etc/$progname-RVSETS.txt"
+	[ -s "$vbase" ] || vbase="/var/lib/$progname/rvsets.txt"
 
 	# Select random video
-	if [ -z "$url" ] && [ -s "$idx" ]; then
+	if [ -z "$url" ] && [ -s "$idx" ] && [ -s "$vbase" ]
+	then
 		# shellcheck disable=SC2207
 		vsamples=( $(< "$idx") )
 		idx=$(( $RANDOM % ${#vsamples[@]} ))
 		vsamples="${vsamples[$idx]}"
 
-		if [ -n "$vsamples" ]; then
-			case "$express_video_set" in
-			youtube)  url="https://youtu.be/$vsamples";;
-			rutube)   url="https://rutube.ru/video/$vsamples/";;
-			esac
+		if [ -n "$vsamples" ] &&
+		   grep -qsE "^$express_video_set\s+" "$vbase"
+		then
+			# shellcheck disable=SC2002
+			url="$(cat -- "$vbase" |
+				sed -n -E "s/^$express_video_set\s+//p" |
+				tail -n1 |
+				sed "s|@VURL@|$vsamples|")"
 		fi
 	fi
 
