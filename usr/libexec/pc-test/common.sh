@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ########################
 ### Common functions ###
@@ -228,6 +228,8 @@ restart_as_root()
 		printf "${CLR_WARN}${msg} '%s'!${CLR_NORM}\n" "${USER-UID $EUID}"
 		su - -c "$scriptname --uid=${EUID}${add}"
 	fi
+
+	sleep 5
 }
 
 # Copies the desktop file to the user startup directory
