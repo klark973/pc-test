@@ -62,8 +62,6 @@ Requires: bash update-kernel pciutils usbutils iproute2
 #Requires: kamoso
 #Requires: vlc
 #Requires: cheese
-#Requires: xdotool
-#Requires: wmctrl
 #Requires: icon-theme-adwaita
 #Requires: sound-theme-freedesktop
 #Requires: fprintd

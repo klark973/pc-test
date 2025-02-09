@@ -35,7 +35,7 @@ pre()
 	[ -n "$have_systemd" ] ||
 		return $TEST_BLOCKED
 
-	for p in yad xdg-open xdotool wmctrl pactl paplay notify-send; do
+	for p in yad xdg-open pactl paplay notify-send; do
 		has_binary "$p" ||
 			return $TEST_BLOCKED
 	done
@@ -318,10 +318,6 @@ express_autotest_init()
 	spawn notify-send "$(nls_title)" "${L254-$i}"
 	spawn sleep 15
 
-	# Maximizing browser window
-	spawn xdotool search --sync --onlyvisible --class "$class" \
-		windowactivate key F11 sleep 0.3 keyup F11 sleep 0.5
-
 	return $TEST_PASSED
 }
 
@@ -462,15 +458,6 @@ express_show_settings()
 	spawn sleep 15
 	express_set_audio_volume 25
 	spawn sleep 15
-
-	# Normalizing a window with the selected video
-	spawn xdotool search --sync --onlyvisible --class "$class" \
-		windowactivate key F11 sleep 0.3 keyup F11 sleep 0.5
-
-	# Maximizing a window with the selected video
-	args="$(spawn xdotool search --sync --class "$class" getwindowpid |head -n1)"
-	args="$(spawn wmctrl -l -p |grep -sE "\s+$args\s+" |head -n1 |cut -f1 -d' ')"
-	spawn wmctrl -i -r "$args" -b add,maximized_horz,maximized_vert ||:
 }
 
 express_try_hibernate()
@@ -584,12 +571,6 @@ express_try_suspend()
 
 express_resume_player()
 {
-	# Autoplay in chromium-based browser using most popular players
-	if [ -z "$local_video_sample" ] && [ "$class" = chromium ]; then
-		spawn xdotool search --sync --onlyvisible --class "$class" \
-			windowactivate key XF86AudioPlay sleep 0.3 keyup XF86AudioPlay
-	fi
-
 	msg="${L267-Click the «Play» button if the video does not play}"
 	spawn notify-send "$(nls_title)" "$msg"
 }

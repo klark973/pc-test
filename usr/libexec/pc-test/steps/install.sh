@@ -147,8 +147,7 @@ testcase()
 			fi
 
 			# 9. Express autotesting
-			list="$pkg xdotool icon-theme-adwaita"
-			list="$list wmctrl sound-theme-freedesktop"
+			list="$pkg icon-theme-adwaita sound-theme-freedesktop"
 
 			for pkg in $list; do
 				if is_pkg_available "$pkg"; then
