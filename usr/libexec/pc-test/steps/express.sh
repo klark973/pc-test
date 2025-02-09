@@ -40,8 +40,10 @@ pre()
 			return $TEST_BLOCKED
 	done
 
-	[ -s /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga ] &&
+	[ -s /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga ] ||
+		return $TEST_BLOCKED
 	[ -s /usr/share/icons/Adwaita/32x32/legacy/audio-volume-muted.png ] ||
+	[ -s /usr/share/icons/Adwaita/symbolic/status/audio-volume-muted-symbolic.svg ] ||
 		return $TEST_BLOCKED
 	p=0
 	spawn : Waiting for network connection...
@@ -128,8 +130,10 @@ express_choice_form()
 	fld="$fld a close-up video of the computer model, interfaces"
 	fld="$fld for connecting external monitors and audio devices."
 
-	img=/usr/share/icons/Adwaita/48x48/legacy/system-shutdown.png
+	img=/usr/share/icons/Adwaita/symbolic/actions/system-shutdown-symbolic.svg
 
+	[ -s "$img" ] ||
+		img=/usr/share/icons/Adwaita/48x48/legacy/system-shutdown.png
 	[ ! -s "$img" ] && img="" ||
 		img="--image=$img"
 	[ -z "$batchmode" ] ||
@@ -342,7 +346,12 @@ express_set_audio_volume()
 		body="$(spawn env LANG=C LC_ALL=C pactl list sinks |
 			sed -n -E 's/^\s+Description: //p' |
 			head -n1)"
-		icon="/usr/share/icons/Adwaita/32x32/legacy/audio-volume-$level.png"
+		icon=/usr/share/icons/Adwaita
+		if [ -d "$icon"/32x32/legacy ]; then
+			icon="$icon/32x32/legacy/audio-volume-$level.png"
+		else
+			icon="$icon/symbolic/status/audio-volume-$level-symbolic.svg"
+		fi
 	fi
 
 	if [ "$volume" = 0 ]; then
