@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ##############################
 ### Collecting information ###
@@ -168,14 +168,17 @@ testcase()
 		spawn xrandr >xrandr.txt
 
 		# 8.3.5. GL/mesa-info
-		spawn glxinfo >glxinfo.txt
+		spawn env ${rundir:+XDG_RUNTIME_DIR="$rundir"} \
+			LANG=C LC_ALL=C glxinfo >glxinfo.txt
 		spawn grep 'direct rendering' glxinfo.txt |
 			tee -a -- "$logfile"
 		if [ -n "$devel_test" ]; then
 			! has_binary es2_info ||
-				spawn es2_info >es2_info.txt
+				spawn env ${rundir:+XDG_RUNTIME_DIR="$rundir"} \
+					LANG=C LC_ALL=C es2_info >es2_info.txt
 			! has_binary eglinfo  ||
-				spawn eglinfo >eglinfo.txt
+				spawn env ${rundir:+XDG_RUNTIME_DIR="$rundir"} \
+					LANG=C LC_ALL=C eglinfo >eglinfo.txt
 		fi
 	fi
 
@@ -201,12 +204,18 @@ testcase()
 
 	# PulseAudio configuration
 	if [ -n "$devel_test" ] && has_binary pactl; then
-		spawn env LANG=C LC_ALL=C pactl list sinks >pa-sinks.log
+		if [ -z "$username" ]; then
+			spawn env LANG=C LC_ALL=C pactl list sinks >pa-sinks.log
+		else
+			dev="env LANG=C LC_ALL=C pactl list sinks"
+			spawn su - -c "$dev" "$username" >pa-sinks.log
+		fi
 	fi
 
 	# PipeWire configuration
 	if [ -n "$devel_test" ] && has_binary pw-dump; then
-		spawn env LANG=C LC_ALL=C pw-dump --color=always >pw-dump.json
+		spawn env ${rundir:+XDG_RUNTIME_DIR="$rundir"} LANG=C \
+			LC_ALL=C pw-dump --color=never >pw-dump.json ||:
 	fi
 }
 

@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ##########################
 ### Internal variables ###
@@ -16,6 +16,7 @@ repodate=
 compname=
 username=
 homedir=
+rundir=
 langid=
 
 # System
