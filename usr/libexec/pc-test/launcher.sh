@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ###############################
 ### DE-independent launcher ###
@@ -27,19 +27,21 @@ has_binary()
 	type -p -- "$1" &>/dev/null
 }
 
-if is_pkg_installed kde5; then
+if is_pkg_installed kde || is_pkg_installed kde5 ||
+   is_pkg_installed plasma6-plasma5support-common
+then
 	have_kde5=1
 fi
 
 if is_pkg_installed xfce4-minimal ||
-	is_pkg_installed xfce4-default
+   is_pkg_installed xfce4-default
 then
 	have_xfce=1
 fi
 
 if is_pkg_installed mate-minimal ||
-	is_pkg_installed mate-default ||
-	is_pkg_installed mate-window-manager
+   is_pkg_installed mate-default ||
+   is_pkg_installed mate-window-manager
 then
 	have_mate=1
 fi
