@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.1.4-alt1] - 2025-02-10
+
+### Added
+
+- Added support for ALT Workstaion 11 (alpha)
+- Added support for ALT Workstaion K 11 (alpha)
+- Added support for Gnome Shell and KDE6 Plasma
+- Added support for Wayland and PipeWire
+- Added support for new Adwaita icon theme
+- Added check to non-informative kernel messages
+
+### Fixed
+
+- Now used XDG_RUNTIME_DIR for collect some logs
+- Completely removed control of the browser window
+- Removed dependency on xdotool and wmctrl
+- Fixed autostart on some distributions
+
+[2.1.4-alt1]: https://github.com/klark973/pc-test/releases/tag/2.1.4-alt1
+
 ## [2.1.3-alt1] - 2025-02-02
 
 ### Added
