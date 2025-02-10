@@ -266,6 +266,7 @@ fi
 # Main loop
 while :; do
 	cd -- "$workdir"/
+	rm -f REBOOT.txt
 	testplan=finish.txt
 	[ -f "STATE/$testplan" ] ||
 		testplan=start.txt
@@ -335,6 +336,9 @@ while :; do
 
 	have_next_step || break
 done
+
+# Removing the 'REBOOT' flag
+rm -f -- "$workdir"/REBOOT.txt
 
 # Removing the desktop file
 remove_desktop_file

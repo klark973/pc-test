@@ -229,7 +229,10 @@ restart_as_root()
 		su - -c "$scriptname --uid=${EUID}${add}"
 	fi
 
-	sleep 5
+	if [ -s "$workdir"/REBOOT.txt ]; then
+		rm -f -- "$workdir"/REBOOT.txt
+		exit 0
+	fi
 }
 
 # Copies the desktop file to the user startup directory
@@ -392,6 +395,8 @@ system_restart()
 	local msg t=5 rc="${1-$TEST_PASSED}"
 
 	# Breaking the test
+	[ ! -d "$workdir"/TMP-ROOT ] ||
+		echo REBOOT >"$workdir"/TMP-ROOT/REBOOT.txt
 	break_step "$rc"
 
 	# Showing last message
