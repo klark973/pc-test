@@ -32,6 +32,7 @@ have_xorg=
 have_kde5=
 have_mate=
 have_xfce=
+have_gnome=
 
 # Hardware
 archname=

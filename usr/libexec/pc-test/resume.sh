@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ################################################
 ### pc-test autorun script to resume testing ###
@@ -38,7 +38,9 @@ fi
 . "$lastdir"/STATE/settings.ini
 
 # Let the window manager finish loading the desktop first
-if [ -n "${have_kde5-}" ] && type -p konsole >/dev/null; then
+if [ -n "${have_gnome-}" ] && type -p kgx >/dev/null; then
+	sleep 5 && exec kgx -T "PC Test" -e "$cmd"
+elif [ -n "${have_kde5-}" ] && type -p konsole >/dev/null; then
 	sleep 5 && exec konsole -T "PC Test" -e $cmd
 elif [ -n "${have_mate-}" ] && type -p mate-terminal >/dev/null; then
 	sleep 5 && exec mate-terminal --window -t "PC Test" -e "$cmd"

@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ###############################
 ### Hardware auto-detection ###
@@ -200,7 +200,8 @@ cando_express_test()
 		return 1
 	[ -n "$sound_test" ] && [ -n "$have_xorg" ] ||
 		return 1
-	[ -n "$have_mate" ] || [ -n "$have_kde5" ] || [ -n "$have_xfce" ] ||
+	[ -n "$have_mate" ] || [ -n "$have_kde5"  ] ||
+	[ -n "$have_xfce" ] || [ -n "$have_gnome" ] ||
 		return 1
 	spawn inxi -G -c0 |grep -qs ' Device-1: ' ||
 		return 1

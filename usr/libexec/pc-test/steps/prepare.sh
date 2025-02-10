@@ -145,6 +145,10 @@ testcase()
 	if [ -x /usr/bin/Xorg ] || [ -x /usr/bin/Xwayland ]; then
 		have_xorg=1
 	fi
+	if is_pkg_installed gnome-shell; then
+		have_gnome=1
+		have_xorg=1
+	fi
 	if is_pkg_installed kde || is_pkg_installed kde5 ||
 	   is_pkg_installed plasma6-plasma5support-common
 	then

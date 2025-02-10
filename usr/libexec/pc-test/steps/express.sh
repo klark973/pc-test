@@ -18,11 +18,12 @@ pre()
 
 	[ -n "$xprss_test" ] && [ -n "$have_xorg" ] && [ -n "$ifaces" ] ||
 		return $TEST_SKIPPED
-	[ -n "$have_mate" ] || [ -n "$have_kde5" ] || [ -n "$have_xfce" ] ||
+	[ -n "$have_mate" ] || [ -n "$have_kde5"  ] ||
+	[ -n "$have_xfce" ] || [ -n "$have_gnome" ] ||
 		return $TEST_SKIPPED
 
 	case "${XDG_CURRENT_DESKTOP-}" in
-	KDE|MATE|XFCE)
+	KDE|MATE|XFCE|GNOME)
 		;;
 	*)	return $TEST_SKIPPED
 		;;
@@ -30,7 +31,10 @@ pre()
 
 	spawn grep -qs ' Device-1: ' inxi-G.txt ||
 		return $TEST_SKIPPED
-	[ -n "${DISPLAY-}" ] && [ "${XDG_SESSION_TYPE-}" = x11 ] ||
+	[ -n "${DISPLAY-}" ] ||
+		return $TEST_BLOCKED
+	[ "${XDG_SESSION_TYPE-}" = x11 ] ||
+	[ "${XDG_SESSION_TYPE-}" = wayland ] ||
 		return $TEST_BLOCKED
 	[ -n "$have_systemd" ] ||
 		return $TEST_BLOCKED
@@ -409,6 +413,7 @@ express_show_settings()
 	local sound
 
 	case "${XDG_CURRENT_DESKTOP-}" in
+	GNOME)	prog=gnome-control-center; args=display;;
 	KDE)	prog=systemsettings; args=kcm_kscreen;;
 	MATE)	prog=mate-display-properties;;
 	XFCE)	prog=xfce4-display-settings;;

@@ -213,8 +213,10 @@ testcase()
 			packages="$packages fio"
 	fi
 
-	# Workaround to make Power Management work in a Desktop Environment
-	if [ -n "$have_mate" ] || [ -n "$have_kde5" ] || [ -n "$have_xfce" ]; then
+	# Workaround to make Power Management work in a DE
+	if [ -n "$have_mate" ] || [ -n "$have_kde5"  ] ||
+	   [ -n "$have_xfce" ] || [ -n "$have_gnome" ]
+	then
 		if is_pkg_installed acpid-events-power; then
 			deinstall="$deinstall acpid-events-power"
 		fi
