@@ -52,7 +52,7 @@ disable_autorun=
 ping_server=ya.ru
 
 # Name of the set of randomly selected videos for express testing
-express_video_set=rutube
+express_video_set=vkvideo
 
 # URL pointing to a Full HD video sample for express testing
 local_video_sample=

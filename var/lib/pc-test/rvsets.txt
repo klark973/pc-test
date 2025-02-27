@@ -1,2 +1,3 @@
 youtube	https://youtu.be/@VURL@
 rutube	https://rutube.ru/video/@VURL@/
+vkvideo	https://vkvideo.ru/video@VURL@
