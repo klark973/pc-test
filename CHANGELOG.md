@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.4-alt2] - 2025-03-01
+
+### Added
+
+- Added 36 new video samples and switch to VK video
+
+### Fixed
+
+- Now the .config/autostart directory will be created automatically if it does not exist
+
+[2.1.4-alt2]: https://github.com/klark973/pc-test/releases/tag/2.1.4-alt2
+
 ## [2.1.4-alt1] - 2025-02-10
 
 ### Added
