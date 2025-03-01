@@ -242,9 +242,12 @@ copy_desktop_file()
 	# Autorun doesn't work on p9, c9f1 and c9f2 because
 	# /usr/bin/xdg-terminal is not packaged into the xdg-utils
 	#
-	if [ "$EUID" != 0 ] && [ -z "$disable_autorun" ] &&
-	   [ -n "${DISPLAY-}" ] && [ -d "$HOME"/.config/autostart ]
+	if [ "$EUID" != 0 ] &&
+	   [ -n "${DISPLAY-}" ] &&
+	   [ -z "$disable_autorun" ]
 	then
+		# shellcheck disable=SC2174
+		mkdir -p -m 0700 -- "$HOME/.config/autostart"
 		sed 's,/launcher\.sh$,/resume.sh,' \
 			"/usr/share/applications/$progname.desktop" \
 			>"$HOME/.config/autostart/$progname.desktop"
