@@ -82,7 +82,10 @@ testcase()
 	# 8.2.3. system-report
 	spawn pushd /var/tmp/ >/dev/null
 	( set +f; rm -f sysreport* ||: ) 2>/dev/null
-	spawn system-report
+	if ! spawn timeout -s KILL 60s system-report; then
+		( set +f; rm -f sysreport* ||: ) 2>/dev/null
+		spawn timeout -s KILL 60s system-report --no-save-ddcprobe ||:
+	fi
 	spawn popd >/dev/null
 	( set +f
 	  mv -f /var/tmp/sysreport*.tar.xz sysreport.tar.xz ||:
