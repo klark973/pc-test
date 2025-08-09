@@ -182,7 +182,8 @@ testcase()
 	[ -z "$ifaces" ] || ifaces="${ifaces:1}"
 
 	# Can we do an express test?
-	cando_express_test && xprss_test=1 ||:
+	cando_express_test && xprss_test=1 ||
+		spawn : We cannot run an express test...
 
 	# Removing temporary file
 	spawn rm -f -- "$tmpf"
@@ -196,15 +197,32 @@ testcase()
 
 cando_express_test()
 {
-	[ "$pctype" != Server ] && [ -n "$ifaces" ] ||
+	spawn : Checking for a Server...
+	[ "$pctype" != Server ] ||
 		return 1
-	[ -n "$sound_test" ] && [ -n "$have_xorg" ] ||
+
+	spawn : Checking for Network interfaces...
+	[ -n "$ifaces" ] ||
 		return 1
+
+	spawn : Checking for Sound cards...
+	[ -n "$sound_test" ] ||
+		return 1
+
+	spawn : Checking for a Xorg server...
+	[ -n "$have_xorg" ] ||
+		return 1
+
+	spawn : Checking for a Desktop Environment...
 	[ -n "$have_mate" ] || [ -n "$have_kde5"  ] ||
 	[ -n "$have_xfce" ] || [ -n "$have_gnome" ] ||
 		return 1
+
+	spawn : Checking for a Graphics card...
 	spawn inxi -G -c0 |grep -qs ' Device-1: ' ||
 		return 1
+
+	spawn : So, we can run an express test...
 	return 0
 }
 

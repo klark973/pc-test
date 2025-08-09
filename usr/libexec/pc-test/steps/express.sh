@@ -16,12 +16,24 @@ pre()
 {
 	local p
 
-	[ -n "$xprss_test" ] && [ -n "$have_xorg" ] && [ -n "$ifaces" ] ||
+	spawn : Checking the test plan...
+	[ -n "$xprss_test" ] ||
 		return $TEST_SKIPPED
+
+	spawn : Checking for a Xorg server...
+	[ -n "$have_xorg" ] ||
+		return $TEST_SKIPPED
+
+	spawn : Checking for Network interfaces...
+	[ -n "$ifaces" ] ||
+		return $TEST_SKIPPED
+
+	spawn : Checking for a Desktop Environment...
 	[ -n "$have_mate" ] || [ -n "$have_kde5"  ] ||
 	[ -n "$have_xfce" ] || [ -n "$have_gnome" ] ||
 		return $TEST_SKIPPED
 
+	spawn : Checking XDG_CURRENT_DESKTOP...
 	case "${XDG_CURRENT_DESKTOP-}" in
 	KDE|MATE|XFCE|GNOME)
 		;;
@@ -29,28 +41,40 @@ pre()
 		;;
 	esac
 
+	spawn : Checking for a Graphics card...
 	spawn grep -qs ' Device-1: ' inxi-G.txt ||
 		return $TEST_SKIPPED
+
+	spawn : Checking DISPLAY...
 	[ -n "${DISPLAY-}" ] ||
 		return $TEST_BLOCKED
+
+	spawn : Checking XDG_SESSION_TYPE...
 	[ "${XDG_SESSION_TYPE-}" = x11 ] ||
 	[ "${XDG_SESSION_TYPE-}" = wayland ] ||
 		return $TEST_BLOCKED
+
+	spawn : Checking for a systemd...
 	[ -n "$have_systemd" ] ||
 		return $TEST_BLOCKED
 
 	for p in yad xdg-open pactl paplay notify-send; do
+		spawn : Checking for a binary: $p...
 		has_binary "$p" ||
 			return $TEST_BLOCKED
 	done
 
+	spawn : Checking for a sound file...
 	[ -s /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga ] ||
 		return $TEST_BLOCKED
+
+	spawn : Checking for some icons...
 	[ -s /usr/share/icons/Adwaita/32x32/legacy/audio-volume-muted.png ] ||
 	[ -s /usr/share/icons/Adwaita/symbolic/status/audio-volume-muted-symbolic.svg ] ||
 		return $TEST_BLOCKED
+
 	p=0
-	spawn : Waiting for network connection...
+	spawn : Waiting for a network connection...
 	while [ "$p" -lt 50 ]; do
 		if ip route |grep -qsE '^default via '; then
 			spawn : Network connection established, counter=$p
@@ -60,6 +84,7 @@ pre()
 		p="$((1 + $p))"
 	done
 
+	spawn : Network unreachable, the express test is blocked
 	return $TEST_BLOCKED
 }
 
