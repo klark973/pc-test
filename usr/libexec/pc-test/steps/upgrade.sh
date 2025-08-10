@@ -50,12 +50,6 @@ testcase()
 
 	for try in 1 2 3; do
 		[ -z "$dist_upgrade" ] ||
-		[ "$repo" != Sisyphus ] ||
-		[ -L /bin ] || [ -L /lib ] ||
-		is_pkg_installed usrmerge-hier-convert ||
-		! is_pkg_available usrmerge-hier-convert ||
-			spawn apt-get install -y usrmerge-hier-convert || rc="$?"
-		[ -z "$dist_upgrade" ] ||
 			spawn apt-get dist-upgrade -y || rc="$?"
 		[ -z "$update_kernel" ] ||
 			spawn update-kernel -f || rc="$?"
