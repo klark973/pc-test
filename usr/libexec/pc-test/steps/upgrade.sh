@@ -128,7 +128,7 @@ setup_apt_sources()
 		setup_network_mirror
 	elif [ "${#local_media_labels[@]}" != 0 ]; then
 		setup_external_media
-	elif [ -n "$repodate" ] && [ -z "$have_altsp" ]; then
+	elif [ -n "$repodate" ]; then
 		url="http://ftp.altlinux.org/pub/distributions/archive"
 
 		case "$repo" in
@@ -136,6 +136,9 @@ setup_apt_sources()
 			url="$url/sisyphus/date"
 			;;
 		p9|p10|p11)
+			url="$url/$repo/date"
+			;;
+		c9f2|c10f2)
 			url="$url/$repo/date"
 			;;
 		*)	url=
@@ -197,7 +200,7 @@ setup_network_mirror()
 	[ -z "$mirror_subdir" ] ||
 		dirp="$dirp/$mirror_subdir"
 	[ -d "$dirp/$repo/noarch/base" ] ||
-		fatal F11 "Couldn\'t connect to server with the local mirror!"
+		fatal F11 "Couldn\'t connect to the server with a local mirror!"
 	msg="${L101-Server with the local mirror is connected}"
 	printf "$msg: ${CLR_BOLD}%s${CLR_NORM}\n\n" "$repo" |
 		tee -a -- "$logfile"
@@ -244,7 +247,7 @@ write_sources()
 			url="file:$url"
 			branch="$repo"
 			mirror=1
-		elif [ -n "$repodate" ] && [ -z "$have_altsp" ]; then
+		elif [ -n "$repodate" ]; then
 			branch="${repodate//\-/\/}"
 			archive=1
 		fi
@@ -292,7 +295,7 @@ write_sources()
 		;;
 
 	c10f2)	# ALT SP v10.2 (Nov 2024)
-		[ -n "$mirror" ] ||
+		[ -n "$mirror" ] || [ -n "$archive" ] ||
 			branch=c10f2/branch
 		first="classic gostcrypto"
 		;;
@@ -301,16 +304,18 @@ write_sources()
 		[ -n "$mirror" ] ||
 			branch=c10f/branch
 		first="classic gostcrypto"
+		archive=
 		;;
 
 	c9f2)	# ALT SP v8.4 (Dec 2021)
-		[ -n "$mirror" ] ||
+		[ -n "$mirror" ] || [ -n "$archive" ] ||
 			branch=CF2/branch
 		;;
 
 	c9f1)	# ALT SP v8.2 (Dec 2020)
 		[ -n "$mirror" ] ||
 			branch=c9f1/branch
+		archive=
 		;;
 	esac
 

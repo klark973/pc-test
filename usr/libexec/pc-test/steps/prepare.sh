@@ -117,6 +117,7 @@ testcase()
 		8.4)	repo=c9f2;;
 		10)	repo=c10f1;;
 		10.2)	repo=c10f2;;
+		10.2.1)	repo=c10f2;;
 		*)	fatal F08 "Unsupported certified distro: %s" "$p";;
 		esac
 	elif [ -z "$repo" ]; then

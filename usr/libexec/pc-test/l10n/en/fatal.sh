@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ######################
 ### Fatal messages ###
@@ -19,7 +19,7 @@ F00=1
 #F08="Unsupported certified distro: %s"
 #F09="Unsupported distro version: %s"
 #F10="External media with the mirror is not connected!"
-#F11="Couldn\'t connect to server with the local mirror!"
+#F11="Couldn\'t connect to the server with a local mirror!"
 #F12="Invalid color mode: \'%s\'."
 #F13="Unsupported option: \'%s\'."
 #F14="To many argument(s): %s"
