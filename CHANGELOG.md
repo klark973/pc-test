@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.1.5-alt1] - 2025-08-11
+
+### Added
+
+- support for ALT SP 10.2.1 distro
+- support for archives c9f2 and c10f2
+
+### Fixed
+
+- improve generic way to detecting distro
+- add workaround when system-report hangs
+- express test: make checks more verbosely
+
+### Removed
+
+- support for UsrMerge in Sisyphus
+
 ## [2.1.4-alt2] - 2025-03-01
 
 ### Added
