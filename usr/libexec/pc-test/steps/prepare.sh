@@ -76,26 +76,38 @@ testcase()
 		distro=WS
 		;;
 	*) # Generic way
-		if [ -z "${n##*sisyphus*}" ] || [ -z "${p##*Regular*}" ]; then
+		if [ -z "${n##*sisyphus*}" ] ||
+		   [ -z "${p##*Regular*}"  ]
+		then
 			distro=REG
 			repo=Sisyphus
-		elif [ -z "${n##*starter*}" ] || [ -z "${p##*Starter*}" ]; then
+		elif [ -z "${n##*starter*}" ] ||
+		     [ -z "${p##*Starter*}" ]
+		then
 			distro=SKIT
-		elif [ -z "${n##*simply*}" ] || [ -z "${p##*Simply*}" ]; then
+		elif [ -z "${n##*simply*}" ] ||
+		     [ -z "${p##*Simply*}" ]
+		then
 			distro=SL
 		elif [ -z "${p##*Workstation K*}" ] ||
 		     [ -z "${p##*K Workstation*}" ]
 		then
 			distro=KWS
-		elif [ -z "${n##*workstation*}" ]; then
+		elif [ -z "${n##*workstation*}" ] ||
+		     [ -z "${p##*Workstation*}" ]
+		then
 			distro=WS
-		elif [ -z "${n##*education*}" ]; then
+		elif [ -z "${n##*education*}" ] ||
+		     [ -z "${p##*Education*}" ]
+		then
 			distro=EDU
 		elif [ -z "${n##*server-v*}" ] ||
 		     [ -z "${p##*Virtualization Server*}" ]
 		then
 			distro=ASV
-		elif [ -z "${n##*server*}" ]; then
+		elif [ -z "${n##*server*}" ] ||
+		     [ -z "${p##*Server*}" ]
+		then
 			distro=SRV
 		else
 			fatal F07 "Unsupported distro: %s" "$p"
