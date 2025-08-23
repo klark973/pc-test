@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ###########################
 ### Text user interface ###
@@ -75,19 +75,15 @@ form_tui()
 	#	fio "Checking Disk drives performance" off		\
 	#	v3d "Checking 2D/3D-Video performance" off		\
 	#	2>RESULTS; clear; cat RESULTS; echo; rm -f RESULTS
-
-	while :; do
+	#
 	i=0
 	exec 3>&1
 	# shellcheck disable=SC2207,SC2294
 	val=( $(eval "${args[@]}" 2>&1 1>&3) ) ||
 		i="$?"
 	exec 3>&-
-	[ "$i" != 0 ] ||
-		break
-	sleep .1
-	done
-
+	[ "$i" = 0 ] ||
+		fatal F20 "Testing canceled."
 	clear
 
 	install_mate=

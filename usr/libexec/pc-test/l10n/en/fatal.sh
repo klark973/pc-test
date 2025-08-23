@@ -28,4 +28,5 @@ F00=1
 #F17="Invalid user ID: \'%s\'."
 #F18="The specified test \'%s\' cannot be retaken at this time."
 #F19="Step script \'%s.sh\' not found."
+#F20="Testing canceled."
 

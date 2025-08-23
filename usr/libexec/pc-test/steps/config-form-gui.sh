@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2025, ALT Linux Team
 
 ################################
 ### Graphical user interface ###
@@ -63,18 +63,13 @@ form_gui()
 	#	--field="Checking 2D/3D-Video performance:CHK"		\
 	#	FALSE TRUE TRUE TRUE FALSE TRUE TRUE FALSE		\
 	#	FALSE FALSE FALSE FALSE FALSE FALSE 2>>xorg.log)"
-
-	while :; do
+	#
 	i=0
 	# shellcheck disable=SC2207,SC2294
 	val=( $(eval "${args[@]}" 2>>"$xorglog") ) ||
 		i="$?"
-	[ "$i" != 0 ] || [ "${#val[@]}" = 0 ] ||
-		break
-	sleep .1
-	done
-
-	i=0
+	[ "$i" = 0 ] && [ "${#val[@]}" != 0 ] ||
+		fatal F20 "Testing canceled."
 	h=0
 	while [ "$i" -lt "$n" ]; do
 		tag="${tests_list[$i]}_test"
