@@ -209,7 +209,7 @@ spawn2()
 #
 restart_as_root()
 {
-	local msg add=
+	local try msg add=
 
 	if [ -n "$update_apt_lists" ] &&
 	   [ -n "$dist_upgrade" ] && [ -n "$update_kernel" ]
@@ -226,7 +226,11 @@ restart_as_root()
 	else
 		msg="${L051-Root privileges required: sudo not yet configured for}"
 		printf "${CLR_WARN}${msg} '%s'!${CLR_NORM}\n" "${USER-UID $EUID}"
-		su - -c "$scriptname --uid=${EUID}${add}"
+
+		for try in 1 2 3; do
+			su - -c "$scriptname --uid=${EUID}${add}" && break ||:
+			[ "$try" != 3 ] || fatal F21 "Couldn\'t configure sudo."
+		done
 	fi
 
 	if [ -s "$workdir"/REBOOT.txt ]; then

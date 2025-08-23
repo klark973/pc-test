@@ -29,4 +29,5 @@ F00=1
 #F18="The specified test \'%s\' cannot be retaken at this time."
 #F19="Step script \'%s.sh\' not found."
 #F20="Testing canceled."
+#F21="Couldn\'t configure sudo."
 
