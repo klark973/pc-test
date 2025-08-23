@@ -164,6 +164,23 @@ testcase()
 		fi
 	fi
 
+	# 9. Express test
+	if [ -n "$xprss_test" ] &&
+	   [ -n "$have_xorg"  ] &&
+	   [ -n "$sound_test" ]
+	then
+		list="xdg-open pactl paplay notify-send"
+
+		for pkg in $list; do
+			is_pkg_available "$pkg" || list=
+		done
+
+		for pkg in $list _; do
+			[ "$pkg" = _ ] || is_pkg_installed "$pkg" ||
+				packages="$packages $pkg"
+		done
+	fi
+
 	# 10.10.7. Fingerprint Scanner
 	if [ -n "$fprnt_test" ] && is_pkg_available fprintd; then
 		is_pkg_installed fprintd ||

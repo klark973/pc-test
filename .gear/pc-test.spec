@@ -72,6 +72,10 @@ Requires: bash update-kernel pciutils usbutils iproute2
 #Requires: pcsc-lite
 #Requires: fio
 #Requires: glmark2
+#Requires: xdg-open
+#Requires: pactl
+#Requires: paplay
+#Requires: notify-send
 #Conflicts: openct
 #Conflicts: pcsc-lite-openct
 #Conflicts: libopenct
@@ -81,7 +85,7 @@ Packager: Leonid Krivoshein <klark@altlinux.org>
 %description
 Computers and servers test suite special for ALT Linux.
 It supports all products, based on p9, p10, c9f1, c9f2,
-c10f1 and c10f2 stable branches and Sisyphus-based
+c10f1 and c10f2 stable branches and also Sisyphus-based
 regular builds.
 
 %package doc
