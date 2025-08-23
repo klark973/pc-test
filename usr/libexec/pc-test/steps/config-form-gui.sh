@@ -65,13 +65,13 @@ form_gui()
 	#	FALSE FALSE FALSE FALSE FALSE FALSE 2>>xorg.log)"
 
 	while :; do
-		i=0
-		# shellcheck disable=SC2207,SC2294
-		val=( $(eval "${args[@]}" 2>>"$xorglog") ) ||
-			i="$?"
-		[ "$i" != 0 ] || [ "${#val[@]}" = 0 ] ||
-			break
-		sleep .1
+	i=0
+	# shellcheck disable=SC2207,SC2294
+	val=( $(eval "${args[@]}" 2>>"$xorglog") ) ||
+		i="$?"
+	[ "$i" != 0 ] || [ "${#val[@]}" = 0 ] ||
+		break
+	sleep .1
 	done
 
 	i=0

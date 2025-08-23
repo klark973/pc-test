@@ -77,15 +77,15 @@ form_tui()
 	#	2>RESULTS; clear; cat RESULTS; echo; rm -f RESULTS
 
 	while :; do
-		i=0
-		exec 3>&1
-		# shellcheck disable=SC2207,SC2294
-		val=( $(eval "${args[@]}" 2>&1 1>&3) ) ||
-			i="$?"
-		exec 3>&-
-		[ "$i" != 0 ] ||
-			break
-		sleep .1
+	i=0
+	exec 3>&1
+	# shellcheck disable=SC2207,SC2294
+	val=( $(eval "${args[@]}" 2>&1 1>&3) ) ||
+		i="$?"
+	exec 3>&-
+	[ "$i" != 0 ] ||
+		break
+	sleep .1
 	done
 
 	clear
