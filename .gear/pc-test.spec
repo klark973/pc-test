@@ -6,7 +6,7 @@
 %endif
 
 Name: pc-test
-Version: 2.1.5
+Version: 2.1.6
 Release: alt1
 
 Summary: PC Test Suite
@@ -143,6 +143,12 @@ sed -i -E "s|$a|$b|g" /etc/sudoers
 %doc img html CHANGELOG.md LICENSE README.md
 
 %changelog
+* Mon Sep 08 2025 Leonid Krivoshein <klark@altlinux.org> 2.1.6-alt1
+- Fixed:
+  + sudo configuration success check (ALT #53393)
+  + added the ability to cancel testing (ALT #53389)
+  + install dependencies for express test (ALT #55638)
+
 * Mon Aug 11 2025 Leonid Krivoshein <klark@altlinux.org> 2.1.5-alt1
 - Added:
   + support for ALT SP 10.2.1 distro
