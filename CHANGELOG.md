@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.6-alt1] - 2025-09-08
+
+### Fixed
+
+- sudo configuration success check
+- added the ability to cancel testing
+- install dependencies for express test
+
 ## [2.1.5-alt1] - 2025-08-11
 
 ### Added
