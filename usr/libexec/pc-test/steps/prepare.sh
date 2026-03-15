@@ -154,8 +154,10 @@ testcase()
 		have_systemd=1
 	fi
 
-	# Checking xserver installation and desktop environment
-	if [ -x /usr/bin/Xorg ] || [ -x /usr/bin/Xwayland ]; then
+	# Checking xserver/wayland installation and desktop environment
+	if [ -x /usr/bin/Xorg ] || [ -x /usr/bin/Xwayland ] ||
+	   is_pkg_installed wayland
+	then
 		have_xorg=1
 	fi
 	if is_pkg_installed gnome-shell; then
@@ -163,7 +165,8 @@ testcase()
 		have_xorg=1
 	fi
 	if is_pkg_installed kde || is_pkg_installed kde5 ||
-	   is_pkg_installed plasma6-plasma5support-common
+	   is_pkg_installed plasma6-plasma5support-common ||
+	   is_pkg_installed kde6-runtime
 	then
 		have_kde5=1
 		have_xorg=1

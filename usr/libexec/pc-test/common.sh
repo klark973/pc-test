@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ########################
 ### Common functions ###
@@ -59,7 +59,8 @@ pause_before_exit()
 {
 	local msg
 
-	[ -n "${desktop_icon_start-}" ] && [ -n "${DISPLAY-}" ] ||
+	[ -n "${desktop_icon_start-}" ] &&
+	[ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ] ||
 		return 0
 
 	if [ -n "$batchmode" ]; then
@@ -247,8 +248,8 @@ copy_desktop_file()
 	# /usr/bin/xdg-terminal is not packaged into the xdg-utils
 	#
 	if [ "$EUID" != 0 ] &&
-	   [ -n "${DISPLAY-}" ] &&
-	   [ -z "$disable_autorun" ]
+	   [ -z "$disable_autorun" ] &&
+	   [ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ]
 	then
 		# shellcheck disable=SC2174
 		mkdir -p -m 0700 -- "$HOME/.config/autostart"

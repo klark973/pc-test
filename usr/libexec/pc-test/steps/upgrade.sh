@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ###########################################
 ### The first part of the system update ###
@@ -82,7 +82,7 @@ testcase()
 	is_pkg_installed inxi ||
 		packages=inxi
 	if [ -n "$have_xorg" ] &&
-	   [ -n "${DISPLAY-}" ] &&
+	   [ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ] &&
 	   is_pkg_available yad
 	then
 		is_pkg_installed yad ||

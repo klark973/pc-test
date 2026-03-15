@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ###############################
 ### Test plan configuration ###
@@ -17,7 +17,8 @@ pre()
 	# Making changes in batch mode is not possible
 	[ -z "$batchmode" ] ||
 		return $TEST_SKIPPED
-	[ -n "${DISPLAY-}" ] && has_binary yad || has_binary dialog ||
+	[ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ] &&
+	has_binary yad || has_binary dialog ||
 		return $TEST_BLOCKED
 	return $TEST_ALLOWED
 }
@@ -28,7 +29,7 @@ testcase()
 
 	nls_config config
 
-	if [ -n "${DISPLAY-}" ] && has_binary yad; then
+	if [ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ] && has_binary yad; then
 		. "$libdir"/steps/config-form-gui.sh
 
 		wconf=1

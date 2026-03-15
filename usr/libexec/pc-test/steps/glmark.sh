@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ############################
 ### Graphics performance ###
@@ -15,7 +15,7 @@ ru_name="Определение производительности видео�
 pre()
 {
 	# Skipping this test when not requested or if there is no X11 session
-	[ -n "$v3d_test" ] && [ -n "${DISPLAY-}" ] ||
+	[ -n "$v3d_test" ] && [ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ] ||
 		return $TEST_SKIPPED
 	return $TEST_ALLOWED
 }

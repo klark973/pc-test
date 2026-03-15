@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 #######################################
 ### Express test of main components ###
@@ -46,7 +46,7 @@ pre()
 		return $TEST_SKIPPED
 
 	spawn : Checking DISPLAY...
-	[ -n "${DISPLAY-}" ] ||
+	[ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ] ||
 		return $TEST_BLOCKED
 
 	spawn : Checking XDG_SESSION_TYPE...

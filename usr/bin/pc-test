@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ###################
 ### Main script ###
@@ -245,8 +245,8 @@ if [ "$EUID" != 0 ] || [ -z "$username" ]; then
 			tee -a -- "$logfile"
 	fi
 
-	# Within X session only
-	if [ -n "${DISPLAY-}" ]
+	# Within Xorg or Wayland session only
+	if [ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ]
 	then
 		# Stopping automatic updates
 		( killall -TERM DiscoverNotifier ||:

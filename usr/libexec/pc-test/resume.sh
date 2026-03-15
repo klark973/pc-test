@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ################################################
 ### pc-test autorun script to resume testing ###
@@ -26,7 +26,7 @@ readonly desktopfile="$HOME/.config/autostart/$progname.desktop"
 readonly cmd="$progname --desktop-icon --continue"
 
 # Checking files of the last testing
-if [ ! -L "$lastdir" ] || [ -z "${DISPLAY-}" ] ||
+if [ ! -L "$lastdir" ] || [ -z "${DISPLAY-}${WAYLAND_DISPLAY-}" ] ||
    [ ! -s "$lastdir/$progname.log" ] || [ ! -s "$lastdir"/STATE/STEP ] ||
    [ ! -f "$lastdir"/STATE/start.txt ] || [ ! -s "$lastdir"/STATE/settings.ini ]
 then

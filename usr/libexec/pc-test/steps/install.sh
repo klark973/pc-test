@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ########################################
 ### Second part of the system update ###
@@ -118,7 +118,7 @@ testcase()
 
 	# Xorg with any DE
 	if [ -z "$have_xorg" ] ||
-	   [ -z "$install_mate" ] && [ -z "${DISPLAY-}" ]
+	   [ -z "${install_mate}${DISPLAY-}${WAYLAND_DISPLAY-}" ]
 	then
 		webcam_test=
 		v3d_test=

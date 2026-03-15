@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ##############################
 ### Collecting information ###
@@ -164,8 +164,9 @@ testcase()
 	# 8.2.13. uname -a
 	spawn uname -a |tee uname.txt
 
-	# With Xorg/x11/Wayland only
-	if [ -n "$have_xorg" ] && [ -n "${DISPLAY-}" ]
+	# With Xorg/Wayland only
+	if [ -n "$have_xorg" ] &&
+	   [ -n "${DISPLAY-}${WAYLAND_DISPLAY-}" ]
 	then
 		# 8.2.14. xrandr
 		spawn xrandr >xrandr.txt

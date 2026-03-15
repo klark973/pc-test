@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ###############################
 ### Hardware auto-detection ###
@@ -131,7 +131,7 @@ testcase()
 	fi
 
 	# Power Management by console: battery systems only
-	if [ -z "$have_xorg" ] || [ -z "${DISPLAY-}" ]; then
+	if [ -z "$have_xorg" ] || [ -z "${DISPLAY-}${WAYLAND_DISPLAY-}" ]; then
 		if spawn inxi -B -c0 |grep -qs ' ID-1: '; then
 			power_test=1
 		fi
