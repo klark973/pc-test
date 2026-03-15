@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.7-alt1] - 2026-03-15
+
+### Added
+
+- support for ALT PVE 11 and ALT SP 10.2.2
+
+### Fixed
+
+- improved support of the wayland server
+
+### Removed
+
+- deleted links to blocked VK videos
+
 ## [2.1.6-alt1] - 2025-09-08
 
 ### Fixed
