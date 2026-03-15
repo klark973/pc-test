@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ####################################
 ### Checking CPU frequency modes ###
@@ -112,7 +112,7 @@ testcase()
 				break
 			o=cpufreq/scaling_setspeed
 			v="$(read_cpu_var "$i" "$o" 2>/dev/null ||
-				echo "<unsupported>")"
+				echo '<unsupported>')"
 			saved_speed[$i]="$v"
 			i=$((1 + $i))
 		done
@@ -263,7 +263,7 @@ testcase()
 
 	# When using an unstable scaling policy such as "ondemand"
 	# or "conservative", and without kernel-level statistics, we
-	# make sure that the average frequency is close to the minimum
+	# must be sure that an average frequency is close to a minimum
 	#
 	else
 		scaling="$(( ($maxf - $minf) / 4 + $minf ))"
@@ -336,7 +336,7 @@ testcase()
 		spawn : Intel SpeedStep Turbo Mode has been switched on ||:
 	fi
 
-	# Warming up and main testing
+	# Warming up and main testing: lfsr32
 	spawn2 stress-ng --cpu 0 --numa 0 --cpu-method matrixprod \
 		--tz --metrics --timeout 30 2>&1 |tee -a -- "$logfile"
 	spawn2 stress-ng --cpu 0 --cpu-method matrixprod --tz \
@@ -454,7 +454,7 @@ save_cpu_array()
 
 write_cpu()
 {
-	echo "$1" >"$left/cpu$2/$3" ||:
+	printf "%s\n" "$1" >"$left/cpu$2/$3" ||:
 }
 
 freq_min()
