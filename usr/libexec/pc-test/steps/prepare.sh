@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 #####################################
 ### Preparing for a system update ###
@@ -102,7 +102,7 @@ testcase()
 		then
 			distro=EDU
 		elif [ -z "${n##*server-v*}" ] ||
-		     [ -z "${p##*Virtualization Server*}" ]
+		     [ -z "${p##*Virtualization*}" ]
 		then
 			distro=ASV
 		elif [ -z "${n##*server*}" ] ||
@@ -129,7 +129,7 @@ testcase()
 		8.4)	repo=c9f2;;
 		10)	repo=c10f1;;
 		10.2)	repo=c10f2;;
-		10.2.1)	repo=c10f2;;
+		10.2.*)	repo=c10f2;;
 		*)	fatal F08 "Unsupported certified distro: %s" "$p";;
 		esac
 	elif [ -z "$repo" ]; then
