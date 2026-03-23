@@ -169,7 +169,7 @@ testcase()
 	   [ -n "$have_xorg"  ] &&
 	   [ -n "$sound_test" ]
 	then
-		list="xdg-open pactl paplay notify-send"
+		list="xdg-utils pulseaudio-utils notify-send"
 
 		for pkg in $list; do
 			is_pkg_available "$pkg" || list=
