@@ -40,8 +40,12 @@ testcase()
 			lsm="$(spawn getenforce |tr '[:upper:]' '[:lower:]')"
 		elif has_binary sestatus; then
 			lsm="$(spawn sestatus |sed -n -E 's/^Current mode://p')"
-		else
+		elif [ ! -f /sys/fs/selinux/enforce ]; then
+			lsm=disabled
+		elif [ "$(head -n1 /sys/fs/selinux/enforce)" = 1 ]; then
 			lsm=enforcing
+		else
+			lsm=disabled
 		fi
 		if [ "$lsm" != enforcing ]; then
 			lsm=
