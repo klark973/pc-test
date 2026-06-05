@@ -223,15 +223,11 @@ restart_as_root()
 	fi
 
 	if [ -s "$HOME/.local/share/$progname/sudo.UID" ]; then
-		sudo $scriptname --uid="$EUID"${add}
+		sudo $scriptname --uid="$EUID"${add} || return $?
 	else
 		msg="${L051-Root privileges required: sudo not yet configured for}"
 		printf "${CLR_WARN}${msg} '%s'!${CLR_NORM}\n" "${USER-UID $EUID}"
-
-		for try in 1 2 3; do
-			su - -c "$scriptname --uid=${EUID}${add}" && break ||:
-			[ "$try" != 3 ] || fatal F21 "Couldn\'t configure sudo."
-		done
+		su - -c "$scriptname --uid=${EUID}${add}" || return $?
 	fi
 
 	if [ -s "$workdir"/REBOOT.txt ]; then

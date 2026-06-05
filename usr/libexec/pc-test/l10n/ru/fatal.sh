@@ -2,7 +2,7 @@
 ### This file is covered by the GNU General Public License
 ### version 3 or later.
 ###
-### Copyright (C) 2024-2025, ALT Linux Team
+### Copyright (C) 2024-2026, ALT Linux Team
 
 ######################
 ### Fatal messages ###
@@ -29,5 +29,4 @@ F17="Неверный ID пользователя: \'%s\'."
 F18="Указанный тест \'%s\' сейчас не может быть пройден повторно."
 F19="Скрипт шага \'%s.sh\' не найден."
 F20="Тестирование отменено."
-F21="Не удалось настроить sudo."
 
