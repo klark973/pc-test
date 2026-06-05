@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.9-alt2] - 2026-06-06
+
+### Fixed
+
+- improved SELinux detection
+- improved restart_as_root()
+
+[2.1.9-alt2]: https://github.com/klark973/pc-test/releases/tag/2.1.9-alt2
+
 ## [2.1.8-alt1] - 2026-03-23
 
 ### Fixed
